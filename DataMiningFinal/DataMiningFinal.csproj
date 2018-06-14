@@ -40,8 +40,9 @@
     <Reference Include="MathNet.Numerics, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.5.1\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="MeasureUtilNative">
-      <HintPath>..\packages\ClusteringMeasure\MeasureUtilNative.dll</HintPath>
+    <Reference Include="MatlabUtil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>MatlabUtil\MatlabUtil.dll</HintPath>
     </Reference>
     <Reference Include="MWArray, Version=2.17.1.0, Culture=neutral, PublicKeyToken=e1d84a0da19db86f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,7 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="MatlabUtil\CalculateDistance.m" />
+    <None Include="MatlabUtil\ClusteringMeasure.m" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MatlabUtil\MatlabUtil.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

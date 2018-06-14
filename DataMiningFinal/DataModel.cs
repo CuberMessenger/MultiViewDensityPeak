@@ -3,7 +3,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
 
-namespace Lab1
+namespace DataMiningFinal
 {
     public enum Algorithms { KMeans, DBSCAN, DensityPeak }
     public enum PointType { CorePoint, BorderPoint, NoisePoint }

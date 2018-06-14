@@ -1,13 +1,14 @@
-﻿using System;
+﻿using MathWorks.MATLAB.NET.Arrays;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lab1
+namespace DataMiningFinal
 {
     public enum DensityDefinition { NumOfNeighbor, GaussianKernal }
-    public enum DcSelection { EntropyBased, DistanceBased, NumOfPointsBased }
+    public enum DcSelection { EntropyBased, DistanceBased, NumOfPointsBased, AverageDistance }
     public class DensityPeak
     {
         private double Dc { get; set; }
@@ -26,7 +27,7 @@ namespace Lab1
 
             //Configure
             DensityDefinition = DensityDefinition.GaussianKernal;
-            DcSelection = DcSelection.NumOfPointsBased;
+            DcSelection = DcSelection.AverageDistance;
         }
 
         private void CalcDc()
@@ -89,13 +90,38 @@ namespace Lab1
                 case DcSelection.NumOfPointsBased:
                     Dc = DataPoints.Length * 0.01;
                     break;
+                case DcSelection.AverageDistance:
+                    double sum = 0;
+                    foreach (var row in Distance)
+                    {
+                        sum += row.Sum();
+                    }
+                    Dc = Math.Sqrt(sum / (Distance.Length * Distance.Length));
+                    break;
             }
 
             Console.WriteLine("DC = {0}", Dc);
         }
 
+        private double[][] GetFeatureMatrix()
+        {
+            double[][] ans = new double[DataPoints.Length][];
+            for (int i = 0; i < DataPoints.Length; i++)
+            {
+                ans[i] = DataPoints[i].features.ToArray();
+            }
+            return ans;
+        }
+
         private void CalculateDistances()
         {
+            Program.initThread.Join();
+            var ansObj = Program.MatlabMethods.CalculateDistance(1,
+                new MWNumericArray(GetFeatureMatrix() as Array),
+                new MWCharArray("euclidean"));
+            var ans = ansObj[0].ToArray() as double[,];
+
+            /////////////////////////////////////////////
             for (int i = 0; i < DataPoints.Length; i++)
             {
                 Distance[i] = new double[DataPoints.Length];
@@ -105,10 +131,11 @@ namespace Lab1
             {
                 for (int j = i; j < DataPoints.Length; j++)
                 {
-                    Distance[i][j] = DataPoints[i] - DataPoints[j];
+                    Distance[i][j] = ans[i, j];
                     Distance[j][i] = Distance[i][j];
                 }
             }
+            /////////////////////////////////////////////
 
             Console.WriteLine("Distance calculated!");
         }

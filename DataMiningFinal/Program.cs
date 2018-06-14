@@ -1,8 +1,8 @@
-﻿using Lab1;
-using MatFileHandler;
+﻿using MatFileHandler;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathWorks.MATLAB.NET.Arrays;
+using MatlabUtil;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,13 +13,13 @@ namespace DataMiningFinal
 {
     class Program
     {
-        private static MeasureUtilNative.ClusteringMeasureHelper ClusteringMeasureHelper;
-        private static Thread initThread;
+        public static MatlabMethods MatlabMethods;
+        public static Thread initThread;
         static void Main(string[] args)
         {
             initThread = new Thread(() =>
             {
-                ClusteringMeasureHelper = new MeasureUtilNative.ClusteringMeasureHelper();
+                MatlabMethods = new MatlabMethods();
                 Console.WriteLine("ClusteringMeasure Inited!");
             });
             initThread.Start();
@@ -111,8 +111,8 @@ namespace DataMiningFinal
         private static void Measure(int[] ans, int[] myans, string name)
         {
             initThread.Join();
-            var resultObj = ClusteringMeasureHelper.ClusteringMeasure(1, new MWNumericArray(ans as Array), new MWNumericArray(myans as Array));
-            var result = resultObj.First() as double[,];
+            var resultObj = MatlabMethods.ClusteringMeasure(1, new MWNumericArray(ans as Array), new MWNumericArray(myans as Array));
+            var result = resultObj.First().ToArray() as double[,];
             Console.WriteLine("For dataset " + name + ":\nACC = {0}\nNMI = {1}\nPUR = {2}\n", result[0, 0], result[0, 1], result[0, 2]);
         }
 
