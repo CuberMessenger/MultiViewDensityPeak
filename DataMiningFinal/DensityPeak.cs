@@ -7,30 +7,33 @@ using System.Threading.Tasks;
 
 namespace DataMiningFinal
 {
-    public enum DensityDefinition { NumOfNeighbor, GaussianKernal }
-    public enum DcSelection { EntropyBased, DistanceBased, NumOfPointsBased, AverageDistance }
     public class DensityPeak
     {
-        private double Dc { get; set; }
-        private int K { get; set; }
+        internal double Dc { get; set; }
+        internal int K { get; set; }
         public DataPoint[] DataPoints { get; set; }
         private List<DataPoint> Centroids { get; set; }
-        private double[][] Distance { get; set; }
-        private DensityDefinition DensityDefinition { get; set; }
-        private DcSelection DcSelection { get; set; }
+        internal double[][] Distance { get; set; }
+        internal double MaxDistance { get; set; }
+        internal DensityDefinition DensityDefinition { get; set; }
+        internal DcSelection DcSelection { get; set; }
 
-        public DensityPeak(int k, DataPoint[] dataPoints)
+        public DensityPeak(int k, DataPoint[] dataPoints, double[][] distance = null)
         {
             K = k;
             DataPoints = dataPoints;
-            Distance = new double[DataPoints.Length][];
+            for (int i = 0; i < DataPoints.Length; i++)
+            {
+                DataPoints[i].id = i;
+            }
+            Distance = distance is null ? new double[DataPoints.Length][] : distance;
 
             //Configure
             DensityDefinition = DensityDefinition.GaussianKernal;
             DcSelection = DcSelection.AverageDistance;
         }
 
-        private void CalcDc()
+        internal void CalcDc()
         {
             switch (DcSelection)
             {
@@ -113,7 +116,7 @@ namespace DataMiningFinal
             return ans;
         }
 
-        private void CalculateDistances()
+        internal void CalculateDistances()
         {
             Program.initThread.Join();
             var ansObj = Program.MatlabMethods.CalculateDistance(1,
@@ -121,26 +124,26 @@ namespace DataMiningFinal
                 new MWCharArray("euclidean"));
             var ans = ansObj[0].ToArray() as double[,];
 
-            /////////////////////////////////////////////
             for (int i = 0; i < DataPoints.Length; i++)
             {
                 Distance[i] = new double[DataPoints.Length];
             }
 
+            MaxDistance = 0;
             for (int i = 0; i < DataPoints.Length; i++)
             {
                 for (int j = i; j < DataPoints.Length; j++)
                 {
                     Distance[i][j] = ans[i, j];
                     Distance[j][i] = Distance[i][j];
+                    MaxDistance = Math.Max(MaxDistance, Distance[i][j]);
                 }
             }
-            /////////////////////////////////////////////
 
             Console.WriteLine("Distance calculated!");
         }
 
-        private void CalculateRhos()
+        internal void CalculateRhos()
         {
             var DcSquare = Dc * Dc;
             for (int i = 0; i < DataPoints.Length; i++)
@@ -161,35 +164,35 @@ namespace DataMiningFinal
             Console.WriteLine("Rhos calculated!");
         }
 
-        private void CalculateDeltas()
+        internal void CalculateDeltas()
         {
             foreach (DataPoint dp in DataPoints)
             {
                 var seniors = DataPoints.Where(p => p.rho > dp.rho);
                 if (seniors.Count() > 0)
                 {
-                    var senior = seniors.OrderBy(p => dp - p).First();
-                    dp.delta = dp - senior;
+                    var senior = seniors.OrderBy(p => Distance[dp.id][p.id]).First();
+                    dp.delta = Distance[dp.id][senior.id];
                     dp.senior = senior;
                 }
                 else
                 {
-                    dp.delta = DataPoints.Except(new DataPoint[] { dp }).Max(p => dp - p);
+                    dp.delta = MaxDistance;
                 }
             }
 
             Console.WriteLine("Deltas calculated!");
         }
 
-        private void CalculateTaus()
+        internal void CalculateTaus()
         {
             foreach (DataPoint dp in DataPoints)
             {
                 var juniors = DataPoints.Where(p => p.rho < dp.rho);
                 if (juniors.Count() > 0)
                 {
-                    var junior = juniors.OrderBy(p => dp - p).First();
-                    dp.tau = dp - junior;
+                    var junior = juniors.OrderBy(p => Distance[dp.id][p.id]).First();
+                    dp.tau = Distance[dp.id][junior.id];
                 }
                 else
                 {
@@ -200,9 +203,7 @@ namespace DataMiningFinal
             Console.WriteLine("Taus calculated!");
         }
 
-        private IEnumerable<DataPoint> GetNeighbours(DataPoint dp) => DataPoints.Where(p => p - dp <= Dc);
-
-        private void AssignClusterID()
+        internal void AssignClusterID()
         {
             var order = DataPoints.OrderByDescending(dp => dp.rho);
 
@@ -216,10 +217,13 @@ namespace DataMiningFinal
             }
         }
 
-        public void Clustering()
+        public void Clustering(bool needCalcDis = true)
         {
             Thread t1, t2;
-            CalculateDistances();
+            if (needCalcDis)
+            {
+                CalculateDistances();
+            }
             CalcDc();
             CalculateRhos();
             //CalculateDeltas();
@@ -240,8 +244,6 @@ namespace DataMiningFinal
                 Centroids[i].clusterID = i;
             }
             AssignClusterID();
-
-            var x = DataPoints.Where(dp => dp.clusterID != null);
         }
     }
 }

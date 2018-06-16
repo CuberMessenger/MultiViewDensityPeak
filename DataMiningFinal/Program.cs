@@ -30,9 +30,10 @@ namespace DataMiningFinal
             //ArtificialDataset("Flame", 2);
             //ArtificialDataset("Aggregation", 7);
 
-            //Mfeat();
+            //MfeatBySingleView();
+            MfeatByMultiView();
 
-            OptDigits();
+            //OptDigits();
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)
@@ -93,19 +94,51 @@ namespace DataMiningFinal
             sr.Close();
             sr = new StreamReader(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\anses\" + name + ".txt");
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Measure(ans: ParseAnswer(sr.ReadToEnd()), myans: GetLabels(dp.DataPoints), name: name);
             //WriteAns(dp);
         }
 
-        private static void Mfeat()
+        private static void MfeatByMultiView()
+        {
+            List<DensityPeak> views = new List<DensityPeak>();
+            IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
+            views.Add(new DensityPeak(10, ParseData(matFile["data_fac"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_fou"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_kar"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_mor"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_pix"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_zer"])));
+
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            mvdp.ConstructAbstractData();
+
+            Measure(ans: GetLabels(matFile["classid"]), myans: GetLabels(mvdp.Clustering()), name: "Mfeat");
+            //WriteAns(densityPeak);
+        }
+
+        private static void MfeatBySingleView()
         {
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
-            var data = ParseData(matFile["data_mor"]);
-            DensityPeak dp = new DensityPeak(10, data);
+
+            string entry = "data_zer";
+            DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]));
             dp.Clustering();
 
-            Measure(ans: GetLabels(ParseData(matFile["classid"])), myans: GetLabels(dp.DataPoints), name: "Mfeat");
+            Console.WriteLine("Single by " + entry);
+            Measure(ans: GetLabels(matFile["classid"]), myans: GetLabels(dp.DataPoints), name: "Mfeat");
             //WriteAns(densityPeak);
+        }
+
+        private static int[] GetLabels(IVariable variable)
+        {
+            var raw = variable.Value.ConvertToDoubleArray();
+            var ans = new int[raw.Length];
+            for (int i = 0; i < raw.Length; i++)
+            {
+                ans[i] = (int)raw[i];
+            }
+            return ans;
         }
 
         private static void Measure(int[] ans, int[] myans, string name)
@@ -114,6 +147,7 @@ namespace DataMiningFinal
             var resultObj = MatlabMethods.ClusteringMeasure(1, new MWNumericArray(ans as Array), new MWNumericArray(myans as Array));
             var result = resultObj.First().ToArray() as double[,];
             Console.WriteLine("For dataset " + name + ":\nACC = {0}\nNMI = {1}\nPUR = {2}\n", result[0, 0], result[0, 1], result[0, 2]);
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private static int[] ParseAnswer(string rawData)

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="DataModel.cs" />
     <Compile Include="DensityPeak.cs" />
+    <Compile Include="MultiViewDensityPeak.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
