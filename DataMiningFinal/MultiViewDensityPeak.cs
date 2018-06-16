@@ -34,6 +34,7 @@ namespace DataMiningFinal
             foreach (var view in Views)
             {
                 view.CalculateDistances();
+                view.CalcDc();
                 for (int i = 0; i < NumOfDataPoints; i++)
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
@@ -44,16 +45,25 @@ namespace DataMiningFinal
             }
 
             //datapoints
+            foreach (var view in Views)
+            {
+                view.CalculateRhos();
+            }
             AbstractDataPoints = new DataPoint[NumOfDataPoints];
             for (int i = 0; i < NumOfDataPoints; i++)
             {
                 AbstractDataPoints[i] = new DataPoint(i);
+                Views.ToList().ForEach(view => AbstractDataPoints[i].rho += view.DataPoints[i].rho);
             }
+
         }
 
         public DataPoint[] Clustering()
         {
             DensityPeak abs = new DensityPeak(Views.First().K, AbstractDataPoints, AbstractDistance);
+            abs.CalculateDeltas();
+            abs.CalculateTaus();
+            abs.AssignSeniors();
             abs.Clustering(false);
             return abs.DataPoints;
         }

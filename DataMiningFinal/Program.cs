@@ -30,8 +30,18 @@ namespace DataMiningFinal
             //ArtificialDataset("Flame", 2);
             //ArtificialDataset("Aggregation", 7);
 
-            //MfeatBySingleView();
-            MfeatByMultiView();
+            //MfeatBySingleView("data_fac");
+            //MfeatBySingleView("data_fou");
+            //MfeatBySingleView("data_kar");
+            //MfeatBySingleView("data_mor");
+            //MfeatBySingleView("data_pix");
+            //MfeatBySingleView("data_zer");
+            //MfeatByMultiView();
+
+            University("cornell");
+            University("texas");
+            University("washington");
+            University("wisconsin");
 
             //OptDigits();
         }
@@ -94,34 +104,44 @@ namespace DataMiningFinal
             sr.Close();
             sr = new StreamReader(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\anses\" + name + ".txt");
 
-            Console.ForegroundColor = ConsoleColor.Green;
             Measure(ans: ParseAnswer(sr.ReadToEnd()), myans: GetLabels(dp.DataPoints), name: name);
             //WriteAns(dp);
+        }
+
+        private static void University(string universityName)
+        {
+            List<DensityPeak> views = new List<DensityPeak>();
+            IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab2\实验2\数据集\" + universityName + @"\" + universityName + ".mat", FileMode.Open))).Read();
+            views.Add(new DensityPeak(5, ParseData(matFile["A"])));
+            views.Add(new DensityPeak(5, ParseData(matFile["F"])));
+
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            mvdp.ConstructAbstractData();
+
+            Measure(ans: GetLabels(matFile["label"]), myans: GetLabels(mvdp.Clustering()), name: universityName);
         }
 
         private static void MfeatByMultiView()
         {
             List<DensityPeak> views = new List<DensityPeak>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
-            views.Add(new DensityPeak(10, ParseData(matFile["data_fac"])));
+            //views.Add(new DensityPeak(10, ParseData(matFile["data_fac"])));
             views.Add(new DensityPeak(10, ParseData(matFile["data_fou"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_kar"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_mor"])));
+            //views.Add(new DensityPeak(10, ParseData(matFile["data_kar"])));
+            //views.Add(new DensityPeak(10, ParseData(matFile["data_mor"])));
             views.Add(new DensityPeak(10, ParseData(matFile["data_pix"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_zer"])));
+            //views.Add(new DensityPeak(10, ParseData(matFile["data_zer"])));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
             mvdp.ConstructAbstractData();
 
             Measure(ans: GetLabels(matFile["classid"]), myans: GetLabels(mvdp.Clustering()), name: "Mfeat");
-            //WriteAns(densityPeak);
         }
 
-        private static void MfeatBySingleView()
+        private static void MfeatBySingleView(string entry)
         {
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
 
-            string entry = "data_zer";
             DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]));
             dp.Clustering();
 
@@ -144,6 +164,7 @@ namespace DataMiningFinal
         private static void Measure(int[] ans, int[] myans, string name)
         {
             initThread.Join();
+            Console.ForegroundColor = ConsoleColor.Green;
             var resultObj = MatlabMethods.ClusteringMeasure(1, new MWNumericArray(ans as Array), new MWNumericArray(myans as Array));
             var result = resultObj.First().ToArray() as double[,];
             Console.WriteLine("For dataset " + name + ":\nACC = {0}\nNMI = {1}\nPUR = {2}\n", result[0, 0], result[0, 1], result[0, 2]);

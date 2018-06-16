@@ -203,6 +203,18 @@ namespace DataMiningFinal
             Console.WriteLine("Taus calculated!");
         }
 
+        internal void AssignSeniors()
+        {
+            foreach (var dp in DataPoints)
+            {
+                var seniors = DataPoints.Where(p => p.rho > dp.rho);
+                if (seniors.Count() > 0)
+                {
+                    dp.senior = seniors.OrderBy(p => Distance[dp.id][p.id]).First();
+                }
+            }
+        }
+
         internal void AssignClusterID()
         {
             var order = DataPoints.OrderByDescending(dp => dp.rho);
@@ -211,7 +223,7 @@ namespace DataMiningFinal
             {
                 if (dp.clusterID is null)
                 {
-                    //dp.clusterID = DataPoints.Where(p => p.rho > dp.rho).OrderBy(p => p - dp).First().clusterID;
+                    //dp.clusterID = DataPoints.Where(p => p.rho > dp.rho).OrderBy(p => Distance[dp.id][p.id]).First().clusterID;
                     dp.clusterID = dp.senior.clusterID;
                 }
             }
@@ -219,21 +231,21 @@ namespace DataMiningFinal
 
         public void Clustering(bool needCalcDis = true)
         {
-            Thread t1, t2;
             if (needCalcDis)
             {
+                Thread t1, t2;
                 CalculateDistances();
+                CalcDc();
+                CalculateRhos();
+                //CalculateDeltas();
+                //CalculateTaus();
+                t1 = new Thread(CalculateDeltas);
+                t2 = new Thread(CalculateTaus);
+                t1.Start();
+                t2.Start();
+                t1.Join();
+                t2.Join();
             }
-            CalcDc();
-            CalculateRhos();
-            //CalculateDeltas();
-            //CalculateTaus();
-            t1 = new Thread(CalculateDeltas);
-            t2 = new Thread(CalculateTaus);
-            t1.Start();
-            t2.Start();
-            t1.Join();
-            t2.Join();
 
             //Determine centroids
             Centroids = new List<DataPoint>(DataPoints.OrderByDescending(dp => dp.rho * (dp.delta - dp.tau)).Take(K));
