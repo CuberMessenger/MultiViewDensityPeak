@@ -35,6 +35,7 @@ namespace DataMiningFinal
             {
                 view.CalculateDistances();
                 view.CalcDc();
+                view.CalculateDistanceEntropy();
                 for (int i = 0; i < NumOfDataPoints; i++)
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)

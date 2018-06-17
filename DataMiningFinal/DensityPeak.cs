@@ -15,6 +15,7 @@ namespace DataMiningFinal
         private List<DataPoint> Centroids { get; set; }
         internal double[][] Distance { get; set; }
         internal double MaxDistance { get; set; }
+        internal double DistanceEntropy { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
 
@@ -143,6 +144,25 @@ namespace DataMiningFinal
             Console.WriteLine("Distance calculated!");
         }
 
+        internal void CalculateDistanceEntropy()
+        {
+            List<double> distinctDistance = new List<double>();
+            for (int i = 0; i < DataPoints.Length; i++)
+            {
+                for (int j = i + 1; j < DataPoints.Length; j++)
+                {
+                    distinctDistance.Add(Distance[i][j] / MaxDistance);
+                }
+            }
+
+            DistanceEntropy = 0;
+            distinctDistance.RemoveAll(dis => dis == 0);
+            distinctDistance.ForEach(dis => DistanceEntropy += -dis * Math.Log(dis));
+            DistanceEntropy = Math.Log(DistanceEntropy);
+            DistanceEntropy = Math.Max(0, DistanceEntropy);
+            DistanceEntropy++;
+        }
+
         internal void CalculateRhos()
         {
             var DcSquare = Dc * Dc;
@@ -235,7 +255,7 @@ namespace DataMiningFinal
             {
                 Thread t1, t2;
                 CalculateDistances();
-                CalcDc();
+                //CalcDc();
                 CalculateRhos();
                 //CalculateDeltas();
                 //CalculateTaus();

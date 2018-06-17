@@ -34,16 +34,31 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_fou");
             //MfeatBySingleView("data_kar");
             //MfeatBySingleView("data_mor");
-            //MfeatBySingleView("data_pix");
+            MfeatBySingleView("data_pix");
             //MfeatBySingleView("data_zer");
             //MfeatByMultiView();
 
-            University("cornell");
-            University("texas");
-            University("washington");
-            University("wisconsin");
+            //University("cornell");
+            //University("texas");
+            //University("washington");
+            //University("wisconsin");
 
             //OptDigits();
+
+            //MultiViewArtificial();
+        }
+
+        private static void MultiViewArtificial()
+        {
+            List<DensityPeak> views = new List<DensityPeak>();
+            IMatFile matFile = (new MatFileReader(new FileStream(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\artificial\artificial.mat", FileMode.Open))).Read();
+            views.Add(new DensityPeak(2, ParseData(matFile["view1"])));
+            views.Add(new DensityPeak(2, ParseData(matFile["view2"])));
+
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            mvdp.ConstructAbstractData();
+
+            Measure(ans: GetLabels(matFile["viewans"]), myans: GetLabels(mvdp.Clustering()), name: "artificial");
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)
@@ -143,6 +158,7 @@ namespace DataMiningFinal
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
 
             DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]));
+
             dp.Clustering();
 
             Console.WriteLine("Single by " + entry);
