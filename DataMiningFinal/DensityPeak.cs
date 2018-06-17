@@ -255,7 +255,7 @@ namespace DataMiningFinal
             {
                 Thread t1, t2;
                 CalculateDistances();
-                //CalcDc();
+                CalcDc();
                 CalculateRhos();
                 //CalculateDeltas();
                 //CalculateTaus();
