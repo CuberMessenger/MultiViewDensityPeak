@@ -8,15 +8,24 @@ namespace DataMiningFinal
 {
     internal class MultiViewDensityPeak
     {
+        private int K { get; set; }
         private int NumOfDataPoints { get; set; }
-        private DensityPeak[] Views { get; set; }
+        private View[] Views { get; set; }
         private DataPoint[] AbstractDataPoints { get; set; }
         private double[][] AbstractDistance { get; set; }
+        private DensityPeak AbstractDensityPeak { get; set; }
 
-        public MultiViewDensityPeak(DensityPeak[] views)
+        public MultiViewDensityPeak(int k, View[] views, DensityDefinition densityDefinition, DcSelection dcSelection)
         {
+            K = k;
             Views = views;
             NumOfDataPoints = Views.First().DataPoints.Length;
+
+            foreach (var view in Views)
+            {
+                view.DensityDefinition = densityDefinition;
+                view.DcSelection = dcSelection;
+            }
         }
 
         public void ConstructAbstractData()
@@ -61,10 +70,9 @@ namespace DataMiningFinal
 
         public DataPoint[] Clustering()
         {
-            DensityPeak abs = new DensityPeak(Views.First().K, AbstractDataPoints, AbstractDistance);
+            DensityPeak abs = new DensityPeak(K, AbstractDataPoints, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
             abs.CalculateDeltas();
             abs.CalculateTaus();
-            abs.AssignSeniors();
             abs.Clustering(false);
             return abs.DataPoints;
         }

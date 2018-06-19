@@ -25,49 +25,49 @@ namespace DataMiningFinal
             initThread.Start();
 
             //eu
-            //ArtificialDataset("Spiral", 3);
-            //ArtificialDataset("Pathbased", 3);
-            //ArtificialDataset("Jain", 2);
-            //ArtificialDataset("Flame", 2);
-            //ArtificialDataset("Aggregation", 7);
+            ArtificialDataset("Spiral", 3);
+            ArtificialDataset("Pathbased", 3);
+            ArtificialDataset("Jain", 2);
+            ArtificialDataset("Flame", 2);
+            ArtificialDataset("Aggregation", 7);
 
-            //MfeatBySingleView("data_fac");
-            //MfeatBySingleView("data_fou");
-            //MfeatBySingleView("data_kar");
-            //MfeatBySingleView("data_mor");
-            //MfeatBySingleView("data_pix");
-            //MfeatBySingleView("data_zer");
-            //MfeatByMultiView();
+            MfeatBySingleView("data_fac");
+            MfeatBySingleView("data_fou");
+            MfeatBySingleView("data_kar");
+            MfeatBySingleView("data_mor");
+            MfeatBySingleView("data_pix");
+            MfeatBySingleView("data_zer");
+            MfeatByMultiView();
 
-            //University("cornell");
-            //University("texas");
-            //University("washington");
-            //University("wisconsin");
+            University("cornell");
+            University("texas");
+            University("washington");
+            University("wisconsin");
 
-            //OptDigits();//eu
+            OptDigits();//eu
 
-            //MultiViewArtificial();//eu
+            MultiViewArtificial();//eu
 
-            Plant();//cityblock
+            Plant();
         }
 
         private static void Plant()
         {
-            List<DensityPeak> views = new List<DensityPeak>();
+            List<View> views = new List<View>();
             using (StreamReader sr = new StreamReader(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\plant\100 leaves plant species\data_Mar_64.txt"))
             {
-                views.Add(new DensityPeak(100, ParsePlantData(sr.ReadToEnd())));
+                views.Add(new View(ParsePlantData(sr.ReadToEnd())));
             }
             using (StreamReader sr = new StreamReader(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\plant\100 leaves plant species\data_Sha_64.txt"))
             {
-                views.Add(new DensityPeak(100, ParsePlantData(sr.ReadToEnd())));
+                views.Add(new View(ParsePlantData(sr.ReadToEnd())));
             }
             using (StreamReader sr = new StreamReader(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\plant\100 leaves plant species\data_Tex_64.txt"))
             {
-                views.Add(new DensityPeak(100, ParsePlantData(sr.ReadToEnd(), false)));
+                views.Add(new View(ParsePlantData(sr.ReadToEnd(), false)));
             }
 
-            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(100, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
 
             var label = new List<int>();
@@ -108,12 +108,12 @@ namespace DataMiningFinal
 
         private static void MultiViewArtificial()
         {
-            List<DensityPeak> views = new List<DensityPeak>();
+            List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\artificial\artificial.mat", FileMode.Open))).Read();
-            views.Add(new DensityPeak(2, ParseData(matFile["view1"])));
-            views.Add(new DensityPeak(2, ParseData(matFile["view2"])));
+            views.Add(new View(ParseData(matFile["view1"])));
+            views.Add(new View(ParseData(matFile["view2"])));
 
-            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(2, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
 
             Measure(ans: GetLabels(matFile["viewans"]), myans: GetLabels(mvdp.Clustering()), name: "artificial");
@@ -183,12 +183,12 @@ namespace DataMiningFinal
 
         private static void University(string universityName)
         {
-            List<DensityPeak> views = new List<DensityPeak>();
+            List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab2\实验2\数据集\" + universityName + @"\" + universityName + ".mat", FileMode.Open))).Read();
-            views.Add(new DensityPeak(5, ParseData(matFile["A"])));
-            views.Add(new DensityPeak(5, ParseData(matFile["F"])));
+            views.Add(new View(ParseData(matFile["A"])));
+            views.Add(new View(ParseData(matFile["F"])));
 
-            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(5, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
 
             Measure(ans: GetLabels(matFile["label"]), myans: GetLabels(mvdp.Clustering()), name: universityName);
@@ -196,16 +196,16 @@ namespace DataMiningFinal
 
         private static void MfeatByMultiView()
         {
-            List<DensityPeak> views = new List<DensityPeak>();
+            List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
-            views.Add(new DensityPeak(10, ParseData(matFile["data_fac"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_fou"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_kar"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_mor"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_pix"])));
-            views.Add(new DensityPeak(10, ParseData(matFile["data_zer"])));
+            views.Add(new View(ParseData(matFile["data_fac"])));
+            views.Add(new View(ParseData(matFile["data_fou"])));
+            views.Add(new View(ParseData(matFile["data_kar"])));
+            views.Add(new View(ParseData(matFile["data_mor"])));
+            views.Add(new View(ParseData(matFile["data_pix"])));
+            views.Add(new View(ParseData(matFile["data_zer"])));
 
-            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(10, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
 
             Measure(ans: GetLabels(matFile["classid"]), myans: GetLabels(mvdp.Clustering()), name: "Mfeat");
@@ -238,10 +238,14 @@ namespace DataMiningFinal
         private static void Measure(int[] ans, int[] myans, string name)
         {
             initThread.Join();
-            Console.ForegroundColor = ConsoleColor.Green;
             var resultObj = MatlabMethods.ClusteringMeasure(1, new MWNumericArray(ans as Array), new MWNumericArray(myans as Array));
             var result = resultObj.First().ToArray() as double[,];
-            Console.WriteLine("For dataset " + name + ":\nACC = {0}\nNMI = {1}\nPUR = {2}\n", result[0, 0], result[0, 1], result[0, 2]);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("For dataset ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(name);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(":\nACC = {0}\nNMI = {1}\nPUR = {2}\n", result[0, 0], result[0, 1], result[0, 2]);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
@@ -289,17 +293,6 @@ namespace DataMiningFinal
             }
 
             return ans;
-        }
-
-        private static void WriteAns(DensityPeak densityPeak)
-        {
-            using (StreamWriter sw = new StreamWriter(@"C:\Users\cuber\Desktop\ans.txt"))
-            {
-                foreach (var dp in densityPeak.DataPoints)
-                {
-                    sw.WriteLine(dp.clusterID);
-                }
-            }
         }
     }
 }
