@@ -56,7 +56,7 @@ namespace DataMiningFinal
 
                                 foreach (var dp in DataPoints)
                                 {
-                                    temp = (DataPoints[j] - dp) / sigma;
+                                    temp = (Distance[j][dp.id]) / sigma;
                                     Phis[j] += Math.Exp(-temp * temp);
                                 }
                             }
@@ -122,7 +122,7 @@ namespace DataMiningFinal
             Program.initThread.Join();
             var ansObj = Program.MatlabMethods.CalculateDistance(1,
                 new MWNumericArray(GetFeatureMatrix() as Array),
-                new MWCharArray("euclidean"));
+                new MWCharArray("cosine"));
             var ans = ansObj[0].ToArray() as double[,];
 
             for (int i = 0; i < DataPoints.Length; i++)

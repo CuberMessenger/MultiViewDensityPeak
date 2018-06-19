@@ -24,6 +24,7 @@ namespace DataMiningFinal
             });
             initThread.Start();
 
+            //eu
             //ArtificialDataset("Spiral", 3);
             //ArtificialDataset("Pathbased", 3);
             //ArtificialDataset("Jain", 2);
@@ -43,11 +44,11 @@ namespace DataMiningFinal
             //University("washington");
             //University("wisconsin");
 
-            //OptDigits();
+            //OptDigits();//eu
 
-            //MultiViewArtificial();
+            //MultiViewArtificial();//eu
 
-            Plant();
+            Plant();//cityblock
         }
 
         private static void Plant()
@@ -197,12 +198,12 @@ namespace DataMiningFinal
         {
             List<DensityPeak> views = new List<DensityPeak>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
-            //views.Add(new DensityPeak(10, ParseData(matFile["data_fac"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_fac"])));
             views.Add(new DensityPeak(10, ParseData(matFile["data_fou"])));
-            //views.Add(new DensityPeak(10, ParseData(matFile["data_kar"])));
-            //views.Add(new DensityPeak(10, ParseData(matFile["data_mor"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_kar"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_mor"])));
             views.Add(new DensityPeak(10, ParseData(matFile["data_pix"])));
-            //views.Add(new DensityPeak(10, ParseData(matFile["data_zer"])));
+            views.Add(new DensityPeak(10, ParseData(matFile["data_zer"])));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(views.ToArray());
             mvdp.ConstructAbstractData();

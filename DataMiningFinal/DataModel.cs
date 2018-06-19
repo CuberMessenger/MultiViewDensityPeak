@@ -31,8 +31,6 @@ namespace DataMiningFinal
             rho = 0;
             senior = this;
         }
-
-        public static double operator -(DataPoint dp1, DataPoint dp2) => (dp1.features - dp2.features).L2Norm();
     }
 
     public enum DensityDefinition { NumOfNeighbor, GaussianKernal }
