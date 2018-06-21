@@ -40,9 +40,9 @@ namespace DataMiningFinal
                     AbstractDistance[i][j] = 0;
                 }
             }
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("UsedDistanceEntropy");
-            Console.ForegroundColor = ConsoleColor.Gray;
+            //Console.ForegroundColor = ConsoleColor.Yellow;
+            //Console.WriteLine("UsedDistanceEntropy");
+            //Console.ForegroundColor = ConsoleColor.Gray;
             foreach (var view in Views)
             {
                 view.CalculateDistances();
@@ -52,24 +52,25 @@ namespace DataMiningFinal
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
-                        AbstractDistance[i][j] += (view.Distance[i][j]) / (view.MaxDistance * view.DistanceEntropy);
+                        AbstractDistance[i][j] += (view.Distance[i][j]) / (view.MaxDistance);// * view.DistanceEntropy);
                     }
                 }
             }
 
             //datapoints
-            foreach (var view in Views)
-            {
-                view.CalculateRhos();
-            }
-            AbstractDataPoints = new DataPoint[NumOfDataPoints];
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("UsedRhosEntropy");
             Console.ForegroundColor = ConsoleColor.Gray;
+            foreach (var view in Views)
+            {
+                view.CalculateRhos();
+                view.CalculateRhosEntropy();
+            }
+            AbstractDataPoints = new DataPoint[NumOfDataPoints];
             for (int i = 0; i < NumOfDataPoints; i++)
             {
                 AbstractDataPoints[i] = new DataPoint(i);
-                Views.ToList().ForEach(view => AbstractDataPoints[i].rho += view.DataPoints[i].rho * view.CalculateRhosEntropy());
+                Views.ToList().ForEach(view => AbstractDataPoints[i].rho += view.DataPoints[i].rho * view.RhosEntropy);
             }
 
         }
