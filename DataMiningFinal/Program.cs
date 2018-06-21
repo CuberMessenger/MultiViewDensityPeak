@@ -25,26 +25,26 @@ namespace DataMiningFinal
             initThread.Start();
 
             //eu
-            ArtificialDataset("Spiral", 3);
-            ArtificialDataset("Pathbased", 3);
-            ArtificialDataset("Jain", 2);
-            ArtificialDataset("Flame", 2);
-            ArtificialDataset("Aggregation", 7);
+            //SingleViewArtificial("Spiral", 3);
+            //SingleViewArtificial("Pathbased", 3);
+            //SingleViewArtificial("Jain", 2);
+            //SingleViewArtificial("Flame", 2);
+            //SingleViewArtificial("Aggregation", 7);
 
-            MfeatBySingleView("data_fac");
-            MfeatBySingleView("data_fou");
-            MfeatBySingleView("data_kar");
-            MfeatBySingleView("data_mor");
-            MfeatBySingleView("data_pix");
-            MfeatBySingleView("data_zer");
-            MfeatByMultiView();
+            //MfeatBySingleView("data_fac");
+            //MfeatBySingleView("data_fou");
+            //MfeatBySingleView("data_kar");
+            //MfeatBySingleView("data_mor");
+            //MfeatBySingleView("data_pix");
+            //MfeatBySingleView("data_zer");
+            //MfeatByMultiView();
 
-            University("cornell");
-            University("texas");
-            University("washington");
-            University("wisconsin");
+            //University("cornell");
+            //University("texas");
+            //University("washington");
+            //University("wisconsin");
 
-            OptDigits();//eu
+            //OptDigits();//eu
 
             MultiViewArtificial();//eu
 
@@ -166,7 +166,7 @@ namespace DataMiningFinal
             Measure(ans: ans, myans: GetLabels(dp.DataPoints), name: "OptDigits");
         }
 
-        private static void ArtificialDataset(string name, int k)
+        private static void SingleViewArtificial(string name, int k)
         {
             StreamReader sr = new StreamReader(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\" + name + ".txt");
             var data = ParseData(sr.ReadToEnd());

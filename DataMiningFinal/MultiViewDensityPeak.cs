@@ -40,16 +40,19 @@ namespace DataMiningFinal
                     AbstractDistance[i][j] = 0;
                 }
             }
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("UsedDistanceEntropy");
+            Console.ForegroundColor = ConsoleColor.Gray;
             foreach (var view in Views)
             {
                 view.CalculateDistances();
                 view.CalcDc();
-                view.CalculateDistanceEntropy();
+                //view.CalculateDistanceEntropy();
                 for (int i = 0; i < NumOfDataPoints; i++)
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
-                        AbstractDistance[i][j] += view.Distance[i][j] / (view.MaxDistance * view.DistanceEntropy);
+                        AbstractDistance[i][j] += (view.Distance[i][j]) / (view.MaxDistance * view.DistanceEntropy);
                     }
                 }
             }
@@ -60,21 +63,24 @@ namespace DataMiningFinal
                 view.CalculateRhos();
             }
             AbstractDataPoints = new DataPoint[NumOfDataPoints];
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("UsedRhosEntropy");
+            Console.ForegroundColor = ConsoleColor.Gray;
             for (int i = 0; i < NumOfDataPoints; i++)
             {
                 AbstractDataPoints[i] = new DataPoint(i);
-                Views.ToList().ForEach(view => AbstractDataPoints[i].rho += view.DataPoints[i].rho);
+                Views.ToList().ForEach(view => AbstractDataPoints[i].rho += view.DataPoints[i].rho * view.CalculateRhosEntropy());
             }
 
         }
 
         public DataPoint[] Clustering()
         {
-            DensityPeak abs = new DensityPeak(K, AbstractDataPoints, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
-            abs.CalculateDeltas();
-            abs.CalculateTaus();
-            abs.Clustering(false);
-            return abs.DataPoints;
+            DensityPeak abstractDensityPeak = new DensityPeak(K, AbstractDataPoints, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
+            abstractDensityPeak.CalculateDeltas();
+            abstractDensityPeak.CalculateTaus();
+            abstractDensityPeak.Clustering(false);
+            return abstractDensityPeak.DataPoints;
         }
     }
 }

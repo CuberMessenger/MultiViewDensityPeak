@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMiningFinal", "DataMiningFinal\DataMiningFinal.csproj", "{7D48BE6E-6DEE-4CBB-8D8B-BC622963534E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtificialDatasetGenerator", "ArtificialDatasetGenerator\ArtificialDatasetGenerator.csproj", "{EAFEF1EE-5A61-479D-868C-2D41704B074F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7D48BE6E-6DEE-4CBB-8D8B-BC622963534E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D48BE6E-6DEE-4CBB-8D8B-BC622963534E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D48BE6E-6DEE-4CBB-8D8B-BC622963534E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAFEF1EE-5A61-479D-868C-2D41704B074F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAFEF1EE-5A61-479D-868C-2D41704B074F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAFEF1EE-5A61-479D-868C-2D41704B074F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAFEF1EE-5A61-479D-868C-2D41704B074F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

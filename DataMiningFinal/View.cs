@@ -14,6 +14,7 @@ namespace DataMiningFinal
         public DataPoint[] DataPoints { get; set; }
         internal double[][] Distance { get; set; }
         internal double MaxDistance { get; set; }
+        internal double MinDistance { get; set; }
         internal double DistanceEntropy { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
@@ -116,7 +117,7 @@ namespace DataMiningFinal
             Program.initThread.Join();
             var ansObj = Program.MatlabMethods.CalculateDistance(1,
                 new MWNumericArray(GetFeatureMatrix() as Array),
-                new MWCharArray("cosine"));
+                new MWCharArray("euclidean"));//euclidean
             var ans = ansObj[0].ToArray() as double[,];
 
             for (int i = 0; i < DataPoints.Length; i++)
@@ -124,7 +125,8 @@ namespace DataMiningFinal
                 Distance[i] = new double[DataPoints.Length];
             }
 
-            MaxDistance = 0;
+            MaxDistance = double.MinValue;
+            MinDistance = double.MaxValue;
             for (int i = 0; i < DataPoints.Length; i++)
             {
                 for (int j = i; j < DataPoints.Length; j++)
@@ -132,6 +134,7 @@ namespace DataMiningFinal
                     Distance[i][j] = ans[i, j];
                     Distance[j][i] = Distance[i][j];
                     MaxDistance = Math.Max(MaxDistance, Distance[i][j]);
+                    MinDistance = Math.Min(MinDistance, Distance[i][j]);
                 }
             }
 
@@ -147,11 +150,27 @@ namespace DataMiningFinal
                 {
                     if (Distance[i][j] != 0)
                     {
-                        var normalizedDistance = Distance[i][j] * MaxDistance;
+                        var normalizedDistance = Distance[i][j] / MaxDistance;
                         DistanceEntropy += -normalizedDistance * Math.Log(normalizedDistance);
                     }
                 }
             }
+        }
+
+        internal double CalculateRhosEntropy()
+        {
+            double ans = 0;
+            double maxRho = 0;
+            foreach (var dp in DataPoints)
+            {
+                maxRho = Math.Max(maxRho, dp.rho);
+            }
+            foreach (var dp in DataPoints)
+            {
+                var normalRho = dp.rho / maxRho;
+                ans += normalRho == 0 ? 0 : -normalRho * Math.Log(normalRho);
+            }
+            return ans;
         }
 
         internal void CalculateRhos()
@@ -172,6 +191,45 @@ namespace DataMiningFinal
             }
 
             Console.WriteLine("Rhos calculated!");
+        }
+
+        internal void CalculateDeltas()
+        {
+            foreach (DataPoint dp in DataPoints)
+            {
+                var seniors = DataPoints.Where(p => p.rho > dp.rho);
+                if (seniors.Count() > 0)
+                {
+                    var senior = seniors.OrderBy(p => Distance[dp.id][p.id]).First();
+                    dp.delta = Distance[dp.id][senior.id];
+                    dp.senior = senior;
+                }
+                else
+                {
+                    dp.delta = MaxDistance;
+                }
+            }
+
+            Console.WriteLine("Deltas calculated!");
+        }
+
+        internal void CalculateTaus()
+        {
+            foreach (DataPoint dp in DataPoints)
+            {
+                var juniors = DataPoints.Where(p => p.rho < dp.rho);
+                if (juniors.Count() > 0)
+                {
+                    var junior = juniors.OrderBy(p => Distance[dp.id][p.id]).First();
+                    dp.tau = Distance[dp.id][junior.id];
+                }
+                else
+                {
+                    dp.tau = dp.delta;
+                }
+            }
+
+            Console.WriteLine("Taus calculated!");
         }
     }
 }

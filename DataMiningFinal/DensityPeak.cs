@@ -25,45 +25,6 @@ namespace DataMiningFinal
             DcSelection = dcSelection;
         }
 
-        internal void CalculateDeltas()
-        {
-            foreach (DataPoint dp in DataPoints)
-            {
-                var seniors = DataPoints.Where(p => p.rho > dp.rho);
-                if (seniors.Count() > 0)
-                {
-                    var senior = seniors.OrderBy(p => Distance[dp.id][p.id]).First();
-                    dp.delta = Distance[dp.id][senior.id];
-                    dp.senior = senior;
-                }
-                else
-                {
-                    dp.delta = MaxDistance;
-                }
-            }
-
-            Console.WriteLine("Deltas calculated!");
-        }
-
-        internal void CalculateTaus()
-        {
-            foreach (DataPoint dp in DataPoints)
-            {
-                var juniors = DataPoints.Where(p => p.rho < dp.rho);
-                if (juniors.Count() > 0)
-                {
-                    var junior = juniors.OrderBy(p => Distance[dp.id][p.id]).First();
-                    dp.tau = Distance[dp.id][junior.id];
-                }
-                else
-                {
-                    dp.tau = dp.delta;
-                }
-            }
-
-            Console.WriteLine("Taus calculated!");
-        }
-
         internal void AssignClusterID()
         {
             var order = DataPoints.OrderByDescending(dp => dp.rho);
