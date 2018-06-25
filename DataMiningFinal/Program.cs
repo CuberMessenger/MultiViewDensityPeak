@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace DataMiningFinal
 {
-    class Program
+    partial class Program
     {
         public static MatlabMethods MatlabMethods;
         public static Thread initThread;
@@ -46,9 +46,11 @@ namespace DataMiningFinal
 
             //OptDigits();//eu
 
-            MultiViewArtificial();//eu
+            //MultiViewArtificial();//eu
 
-            Plant();
+            //Plant();
+
+            ThreeSource();
         }
 
         private static void Plant()

@@ -117,7 +117,7 @@ namespace DataMiningFinal
             Program.initThread.Join();
             var ansObj = Program.MatlabMethods.CalculateDistance(1,
                 new MWNumericArray(GetFeatureMatrix() as Array),
-                new MWCharArray("euclidean"));//euclidean
+                new MWCharArray("cosine"));//euclidean
             var ans = ansObj[0].ToArray() as double[,];
 
             for (int i = 0; i < DataPoints.Length; i++)
