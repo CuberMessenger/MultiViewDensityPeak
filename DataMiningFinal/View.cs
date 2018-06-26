@@ -19,7 +19,7 @@ namespace DataMiningFinal
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
 
-        public View(DataPoint[] dataPoints)
+        public View(DataPoint[] dataPoints, bool needNormalize = false)
         {
             DataPoints = dataPoints;
             for (int i = 0; i < DataPoints.Length; i++)
@@ -27,6 +27,25 @@ namespace DataMiningFinal
                 DataPoints[i].id = i;
             }
             Distance = Distance is null ? new double[DataPoints.Length][] : Distance;
+
+            if (needNormalize)
+            {
+                var maxes = Enumerable.Repeat(double.MinValue, DataPoints.First().features.Count).ToArray();
+                foreach (var dp in DataPoints)
+                {
+                    for (int i = 0; i < dp.features.Count; i++)
+                    {
+                        maxes[i] = Math.Max(maxes[i], dp.features[i]);
+                    }
+                }
+                foreach (var dp in DataPoints)
+                {
+                    for (int i = 0; i < dp.features.Count; i++)
+                    {
+                        dp.features[i] /= maxes[i];
+                    }
+                }
+            }
         }
 
         internal void CalcDc()

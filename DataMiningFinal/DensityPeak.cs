@@ -38,6 +38,18 @@ namespace DataMiningFinal
             }
         }
 
+        internal void CalculateMaxDistance()
+        {
+            MaxDistance = double.MinValue;
+            foreach (var line in Distance)
+            {
+                foreach (var dis in line)
+                {
+                    MaxDistance = Math.Max(MaxDistance, dis);
+                }
+            }
+        }
+
         public void Clustering(bool needCalcDis = true)
         {
             if (needCalcDis)
@@ -59,6 +71,7 @@ namespace DataMiningFinal
                 Centroids[i].clusterID = i;
             }
             AssignClusterID();
+            //AssignClusterIDByBFS();
         }
     }
 }

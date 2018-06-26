@@ -53,13 +53,14 @@ namespace DataMiningFinal
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
                         AbstractDistance[i][j] += (view.Distance[i][j]) / (view.MaxDistance);// * view.DistanceEntropy);
+                        //AbstractDistance[i][j] += Math.Exp(view.Distance[i][j] / (view.MaxDistance));
                     }
                 }
             }
 
             //datapoints
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("UsedRhosEntropy");
+            //Console.WriteLine("UsedRhosEntropy");
             Console.ForegroundColor = ConsoleColor.Gray;
             foreach (var view in Views)
             {
@@ -70,7 +71,8 @@ namespace DataMiningFinal
             for (int i = 0; i < NumOfDataPoints; i++)
             {
                 AbstractDataPoints[i] = new DataPoint(i);
-                Views.ToList().ForEach(view => AbstractDataPoints[i].rho += view.DataPoints[i].rho * view.RhosEntropy);
+                AbstractDataPoints[i].rho = 1d;
+                Views.ToList().ForEach(view => AbstractDataPoints[i].rho *= view.DataPoints[i].rho);// * view.RhosEntropy);
             }
 
         }
@@ -78,6 +80,7 @@ namespace DataMiningFinal
         public DataPoint[] Clustering()
         {
             DensityPeak abstractDensityPeak = new DensityPeak(K, AbstractDataPoints, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
+            abstractDensityPeak.CalculateMaxDistance();
             abstractDensityPeak.CalculateDeltas();
             abstractDensityPeak.CalculateTaus();
             abstractDensityPeak.Clustering(false);

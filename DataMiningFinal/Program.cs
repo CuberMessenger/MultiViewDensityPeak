@@ -48,9 +48,9 @@ namespace DataMiningFinal
 
             //MultiViewArtificial();//eu
 
-            //Plant();
+            Plant();
 
-            ThreeSource();
+            //ThreeSource();
         }
 
         private static void Plant()
@@ -200,12 +200,12 @@ namespace DataMiningFinal
         {
             List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["data_fac"])));
-            views.Add(new View(ParseData(matFile["data_fou"])));
-            views.Add(new View(ParseData(matFile["data_kar"])));
-            views.Add(new View(ParseData(matFile["data_mor"])));
-            views.Add(new View(ParseData(matFile["data_pix"])));
-            views.Add(new View(ParseData(matFile["data_zer"])));
+            views.Add(new View(ParseData(matFile["data_fac"]), true));
+            views.Add(new View(ParseData(matFile["data_fou"]), true));
+            views.Add(new View(ParseData(matFile["data_kar"]), true));
+            views.Add(new View(ParseData(matFile["data_mor"]), true));
+            views.Add(new View(ParseData(matFile["data_pix"]), true));
+            views.Add(new View(ParseData(matFile["data_zer"]), true));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(10, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
