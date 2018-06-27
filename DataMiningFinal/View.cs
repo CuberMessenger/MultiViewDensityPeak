@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataMiningFinal
@@ -136,7 +134,7 @@ namespace DataMiningFinal
             Program.initThread.Join();
             var ansObj = Program.MatlabMethods.CalculateDistance(1,
                 new MWNumericArray(GetFeatureMatrix() as Array),
-                new MWCharArray("cosine"));//euclidean
+                new MWCharArray("euclidean"));//euclidean
             var ans = ansObj[0].ToArray() as double[,];
 
             for (int i = 0; i < DataPoints.Length; i++)
@@ -156,22 +154,6 @@ namespace DataMiningFinal
             }
 
             Console.WriteLine("Distance calculated!");
-        }
-
-        internal void CalculateDistanceEntropy()
-        {
-            DistanceEntropy = 0;
-            for (int i = 0; i < DataPoints.Length; i++)
-            {
-                for (int j = 0; j < DataPoints.Length; j++)
-                {
-                    if (Distance[i][j] != 0)
-                    {
-                        var normalizedDistance = Distance[i][j] / MaxDistance;
-                        DistanceEntropy += -normalizedDistance * Math.Log(normalizedDistance);
-                    }
-                }
-            }
         }
 
         internal void CalculateRhosEntropy()
@@ -244,7 +226,6 @@ namespace DataMiningFinal
                     dp.tau = dp.delta;
                 }
             }
-
             Console.WriteLine("Taus calculated!");
         }
     }

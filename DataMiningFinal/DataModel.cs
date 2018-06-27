@@ -1,14 +1,8 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
-using MathWorks.MATLAB.NET.Arrays;
-using System;
-using System.Collections.Generic;
 
 namespace DataMiningFinal
 {
-    public enum Algorithms { KMeans, DBSCAN, DensityPeak }
-    public enum PointType { CorePoint, BorderPoint, NoisePoint }
-
     public class DataPoint
     {
         public Vector<double> features { get; private set; }

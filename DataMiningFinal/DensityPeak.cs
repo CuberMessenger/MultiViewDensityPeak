@@ -1,9 +1,7 @@
-﻿using MathWorks.MATLAB.NET.Arrays;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DataMiningFinal
 {
@@ -38,7 +36,7 @@ namespace DataMiningFinal
             }
         }
 
-        internal void CalculateMaxDistance()
+        internal void FindMaxDistance()
         {
             MaxDistance = double.MinValue;
             foreach (var line in Distance)
@@ -71,7 +69,6 @@ namespace DataMiningFinal
                 Centroids[i].clusterID = i;
             }
             AssignClusterID();
-            //AssignClusterIDByBFS();
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using MatFileHandler;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathWorks.MATLAB.NET.Arrays;
-using MatlabUtil;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -26,17 +20,17 @@ namespace DataMiningFinal
             double[][] reutersMTX = new double[NumOfArticalsIn3Sourse][];
             double[][] guardianMTX = new double[NumOfArticalsIn3Sourse][];
 
-            var bbcIDs = ParseArticalID(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources_bbc.docs");
-            var reutersIDs = ParseArticalID(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources_reuters.docs");
-            var guardianIDs = ParseArticalID(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources_guardian.docs");
+            var bbcIDs = ParseArticalID(@"..\..\..\Datasets\3sources\3sources_bbc.docs");
+            var reutersIDs = ParseArticalID(@"..\..\..\Datasets\3sources\3sources_reuters.docs");
+            var guardianIDs = ParseArticalID(@"..\..\..\Datasets\3sources\3sources_guardian.docs");
             jointArticalsID = bbcIDs.Intersect(reutersIDs).Intersect(guardianIDs).ToList();
 
             Thread bbcMTXThread = new Thread(
-                () => ParseMTX(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources_bbc.mtx", ref bbcMTX, ref bbcIDs));
+                () => ParseMTX(@"..\..\..\Datasets\3sources\3sources_bbc.mtx", ref bbcMTX, ref bbcIDs));
             Thread reutersMTXThread = new Thread(
-                () => ParseMTX(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources_reuters.mtx", ref reutersMTX, ref reutersIDs));
+                () => ParseMTX(@"..\..\..\Datasets\3sources\3sources_reuters.mtx", ref reutersMTX, ref reutersIDs));
             Thread guardianMTXThread = new Thread(
-                () => ParseMTX(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources_guardian.mtx", ref guardianMTX, ref guardianIDs));
+                () => ParseMTX(@"..\..\..\Datasets\3sources\3sources_guardian.mtx", ref guardianMTX, ref guardianIDs));
             bbcMTXThread.Start();
             reutersMTXThread.Start();
             guardianMTXThread.Start();
@@ -67,7 +61,7 @@ namespace DataMiningFinal
         {
             int[] ans = new int[jointIDs.Count];
             int[] allLabel = new int[NumOfArticalsIn3Sourse];
-            using (StreamReader sr = new StreamReader(@"D:\Software\Visual Studio 2017\Workplace\DataMiningFinal\Datasets\3sources\3sources.disjoint.clist"))
+            using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\3sources\3sources.disjoint.clist"))
             {
                 string line = sr.ReadLine();
                 int label = 0;
