@@ -6,7 +6,7 @@ namespace DataMiningFinal
 {
     partial class Program
     {
-        private static void Plant()
+        private static void PlantByMultiView()
         {
             List<View> views = new List<View>();
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Mar_64.txt"))
@@ -25,6 +25,11 @@ namespace DataMiningFinal
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(100, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
 
+            Measure(ans: GenerateCorrectPlantAnswer(), myans: GetLabels(mvdp.Clustering()), name: "plant");
+        }
+
+        private static int[] GenerateCorrectPlantAnswer()
+        {
             var label = new List<int>();
             for (int i = 0; i < 100; i++)
             {
@@ -34,8 +39,19 @@ namespace DataMiningFinal
                 }
             }
             label.RemoveAt(0);
+            return label.ToArray();
+        }
 
-            Measure(ans: label.ToArray(), myans: GetLabels(mvdp.Clustering()), name: "plant");
+        private static void PlantBySingleView(string viewName)
+        {
+            DensityPeak dp;
+            using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\" + viewName + "_64.txt"))
+            {
+                dp = new DensityPeak(100, ParsePlantData(sr.ReadToEnd(), viewName != "data_Tex"));
+            }
+            dp.Clustering();
+
+            Measure(ans: GenerateCorrectPlantAnswer(), myans: GetLabels(dp.DataPoints), name: "plant_" + viewName);
         }
 
         private static DataPoint[] ParsePlantData(string rawData, bool needJump = true)
