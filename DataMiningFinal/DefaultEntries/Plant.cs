@@ -11,18 +11,18 @@ namespace DataMiningFinal
             List<View> views = new List<View>();
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Mar_64.txt"))
             {
-                views.Add(new View(ParsePlantData(sr.ReadToEnd())));
+                views.Add(new View(ParsePlantData(sr.ReadToEnd()), "cosine"));
             }
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Sha_64.txt"))
             {
-                views.Add(new View(ParsePlantData(sr.ReadToEnd())));
+                views.Add(new View(ParsePlantData(sr.ReadToEnd()), "cosine"));
             }
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Tex_64.txt"))
             {
-                views.Add(new View(ParsePlantData(sr.ReadToEnd(), false)));
+                views.Add(new View(ParsePlantData(sr.ReadToEnd(), false), "cosine"));
             }
 
-            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(100, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
+            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(100, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance, "cosine");
             mvdp.ConstructAbstractData();
 
             Measure(ans: GenerateCorrectPlantAnswer(), myans: GetLabels(mvdp.Clustering()), name: "plant");
@@ -47,7 +47,7 @@ namespace DataMiningFinal
             DensityPeak dp;
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\" + viewName + "_64.txt"))
             {
-                dp = new DensityPeak(100, ParsePlantData(sr.ReadToEnd(), viewName != "data_Tex"));
+                dp = new DensityPeak(100, ParsePlantData(sr.ReadToEnd(), viewName != "data_Tex"), "cosine");
             }
             dp.Clustering();
 

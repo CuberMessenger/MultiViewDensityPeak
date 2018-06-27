@@ -10,11 +10,13 @@ namespace DataMiningFinal
         private DataPoint[] AbstractDataPoints { get; set; }
         private double[][] AbstractDistance { get; set; }
         private DensityPeak AbstractDensityPeak { get; set; }
+        private string DistanceMetricForAbstractData { get; set; }
 
-        public MultiViewDensityPeak(int k, View[] views, DensityDefinition densityDefinition, DcSelection dcSelection)
+        public MultiViewDensityPeak(int k, View[] views, DensityDefinition densityDefinition, DcSelection dcSelection, string distanceMetric = "euclidean")
         {
             K = k;
             Views = views;
+            DistanceMetricForAbstractData = distanceMetric;
             NumOfDataPoints = Views.First().DataPoints.Length;
 
             foreach (var view in Views)
@@ -66,7 +68,8 @@ namespace DataMiningFinal
 
         public DataPoint[] Clustering()
         {
-            DensityPeak abstractDensityPeak = new DensityPeak(K, AbstractDataPoints, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
+            DensityPeak abstractDensityPeak =
+                new DensityPeak(K, AbstractDataPoints, DistanceMetricForAbstractData, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
             abstractDensityPeak.FindMaxDistance();
             abstractDensityPeak.CalculateDeltas();
             abstractDensityPeak.CalculateTaus();

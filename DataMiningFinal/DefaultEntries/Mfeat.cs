@@ -11,12 +11,12 @@ namespace DataMiningFinal
         {
             List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["data_fac"]), true));
-            views.Add(new View(ParseData(matFile["data_fou"]), true));
-            views.Add(new View(ParseData(matFile["data_kar"]), true));
-            views.Add(new View(ParseData(matFile["data_mor"]), true));
-            views.Add(new View(ParseData(matFile["data_pix"]), true));
-            views.Add(new View(ParseData(matFile["data_zer"]), true));
+            views.Add(new View(ParseData(matFile["data_fac"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_fou"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_kar"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_mor"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_pix"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_zer"]), "euclidean"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(10, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
@@ -29,7 +29,7 @@ namespace DataMiningFinal
         {
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
 
-            DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]));
+            DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]), "euclidean");
 
             dp.Clustering();
 

@@ -56,8 +56,8 @@ namespace DataMiningFinal
         {
             List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\artificial\artificial.mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["view1"])));
-            views.Add(new View(ParseData(matFile["view2"])));
+            views.Add(new View(ParseData(matFile["view1"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["view2"]), "euclidean"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(2, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();

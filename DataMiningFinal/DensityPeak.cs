@@ -11,9 +11,10 @@ namespace DataMiningFinal
         private List<DataPoint> Centroids { get; set; }
 
         public DensityPeak(int k, DataPoint[] dataPoints,
+            string distanceMetric,
             DensityDefinition densityDefinition = DensityDefinition.GaussianKernal,
             DcSelection dcSelection = DcSelection.AverageDistance,
-            double[][] distance = null) : base(dataPoints)
+            double[][] distance = null) : base(dataPoints, distanceMetric)
         {
             K = k;
             Distance = distance is null ? new double[DataPoints.Length][] : distance;

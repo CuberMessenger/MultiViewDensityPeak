@@ -71,7 +71,6 @@
     <Compile Include="DefaultEntries\Plant.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DefaultEntries\SingleView.cs" />
     <Compile Include="DefaultEntries\University.cs" />
     <Compile Include="View.cs" />
   </ItemGroup>

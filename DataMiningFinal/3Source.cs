@@ -47,9 +47,9 @@ namespace DataMiningFinal
 
             answer = Parse3SourceLabel(ref jointArticalsID);
 
-            views.Add(new View(bbcDataPoints.ToArray()));
-            views.Add(new View(reutersDataPoints.ToArray()));
-            views.Add(new View(guardianDataPoints.ToArray()));
+            views.Add(new View(bbcDataPoints.ToArray(), "euclidean"));
+            views.Add(new View(reutersDataPoints.ToArray(), "euclidean"));
+            views.Add(new View(guardianDataPoints.ToArray(), "euclidean"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(6, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();

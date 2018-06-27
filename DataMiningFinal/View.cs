@@ -16,8 +16,9 @@ namespace DataMiningFinal
         internal double RhosEntropy { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
+        internal string DistanceMetric { get; set; }
 
-        public View(DataPoint[] dataPoints, bool needNormalize = false)
+        public View(DataPoint[] dataPoints, string distanceMetric)
         {
             DataPoints = dataPoints;
             for (int i = 0; i < DataPoints.Length; i++)
@@ -25,25 +26,7 @@ namespace DataMiningFinal
                 DataPoints[i].id = i;
             }
             Distance = Distance is null ? new double[DataPoints.Length][] : Distance;
-
-            if (needNormalize)
-            {
-                var maxes = Enumerable.Repeat(double.MinValue, DataPoints.First().features.Count).ToArray();
-                foreach (var dp in DataPoints)
-                {
-                    for (int i = 0; i < dp.features.Count; i++)
-                    {
-                        maxes[i] = Math.Max(maxes[i], dp.features[i]);
-                    }
-                }
-                foreach (var dp in DataPoints)
-                {
-                    for (int i = 0; i < dp.features.Count; i++)
-                    {
-                        dp.features[i] /= maxes[i];
-                    }
-                }
-            }
+            DistanceMetric = distanceMetric;
         }
 
         internal void CalcDc()
@@ -134,7 +117,7 @@ namespace DataMiningFinal
             Program.initThread.Join();
             var ansObj = Program.MatlabMethods.CalculateDistance(1,
                 new MWNumericArray(GetFeatureMatrix() as Array),
-                new MWCharArray("cosine"));//euclidean
+                new MWCharArray(DistanceMetric));//euclidean
             var ans = ansObj[0].ToArray() as double[,];
 
             for (int i = 0; i < DataPoints.Length; i++)
