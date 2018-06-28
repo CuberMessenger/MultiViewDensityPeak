@@ -46,7 +46,7 @@ namespace DataMiningFinal
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
-                        AbstractDistance[i][j] += view.Distance[i][j] / view.MaxDistance;
+                        AbstractDistance[i][j] += (view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance);
                     }
                 }
             }
@@ -55,7 +55,6 @@ namespace DataMiningFinal
             foreach (var view in Views)
             {
                 view.CalculateRhos();
-                view.CalculateRhosEntropy();
             }
             AbstractDataPoints = new DataPoint[NumOfDataPoints];
             for (int i = 0; i < NumOfDataPoints; i++)
