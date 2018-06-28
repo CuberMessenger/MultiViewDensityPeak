@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DataMiningFinal
 {
@@ -13,7 +12,6 @@ namespace DataMiningFinal
         internal double[][] Distance { get; set; }
         internal double MaxDistance { get; set; }
         internal double MinDistance { get; set; }
-        internal double MaxRho { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
         internal string DistanceMetric { get; set; }
@@ -33,47 +31,6 @@ namespace DataMiningFinal
         {
             switch (DcSelection)
             {
-                case DcSelection.EntropyBased:// To be refine
-                    double minE = double.MaxValue;
-                    double bestSigma = 1;
-
-                    Parallel.For(1, 4, (x) =>
-                    {
-                        for (int i = x * 30; i < x * 30 + 30; i++)
-                        {
-                            double sigma = i * 0.01;
-                            double[] Phis = new double[DataPoints.Length];
-                            double temp;
-
-                            for (int j = 0; j < DataPoints.Length; j++)
-                            {
-                                Phis[j] = 0;
-
-                                foreach (var dp in DataPoints)
-                                {
-                                    temp = (Distance[j][dp.id]) / sigma;
-                                    Phis[j] += Math.Exp(-temp * temp);
-                                }
-                            }
-
-                            double curE = 0;
-                            double z = Phis.Sum();
-                            foreach (var phi in Phis)
-                            {
-                                temp = phi / z;
-                                curE -= temp * Math.Log(temp);
-                            }
-
-                            if (curE < minE)
-                            {
-                                minE = curE;
-                                bestSigma = sigma;
-                            }
-                        }
-                    });
-
-                    Dc = (3 * bestSigma) / Math.Sqrt(2);
-                    break;
                 case DcSelection.DistanceBased:
                     var distinctDistances = new List<double>();
                     for (int i = 0; i < DataPoints.Length; i++)
@@ -93,7 +50,7 @@ namespace DataMiningFinal
                     double sum = 0;
                     foreach (var row in Distance)
                     {
-                        sum += row.Sum();
+                        row.Where(d => !double.IsInfinity(d)).ToList().ForEach(d => sum += d);
                     }
                     Dc = Math.Sqrt(sum / (Distance.Length * Distance.Length));
                     break;
@@ -114,29 +71,64 @@ namespace DataMiningFinal
 
         internal void CalculateDistances()
         {
-            Program.initThread.Join();
-            var ansObj = Program.MatlabMethods.CalculateDistance(1,
-                new MWNumericArray(GetFeatureMatrix() as Array),
-                new MWCharArray(DistanceMetric));//euclidean
-            var ans = ansObj[0].ToArray() as double[,];
-
-            for (int i = 0; i < DataPoints.Length; i++)
-            {
-                Distance[i] = new double[DataPoints.Length];
-            }
-
             MaxDistance = double.MinValue;
             MinDistance = double.MaxValue;
-            for (int i = 0; i < DataPoints.Length; i++)
+
+            if (DistanceMetric == "geodesic")
             {
-                for (int j = i; j < DataPoints.Length; j++)
+                for (int i = 0; i < DataPoints.Length; i++)
                 {
-                    Distance[i][j] = ans[i, j];
-                    Distance[j][i] = Distance[i][j];
-                    MaxDistance = Math.Max(MaxDistance, Distance[i][j]);
-                    if (i != j)
+                    Distance[i] = DataPoints[i].features.ToArray();
+                    for (int j = 0; j < DataPoints.Length; j++)
                     {
-                        MinDistance = Math.Min(MinDistance, Distance[i][j]);
+                        if (Distance[i][j] == 0 && i != j)
+                        {
+                            Distance[i][j] = double.PositiveInfinity;
+                        }
+                    }
+                }
+
+                for (int k = 0; k < DataPoints.Length; k++)
+                {
+                    for (int i = 0; i < DataPoints.Length; i++)
+                    {
+                        for (int j = 0; j < DataPoints.Length; j++)
+                        {
+                            Distance[i][j] = Math.Min(Distance[i][j], Distance[i][k] + Distance[k][j]);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < DataPoints.Length; i++)
+                {
+                    for (int j = 0; j < DataPoints.Length; j++)
+                    {
+                        MaxDistance = double.IsInfinity(Distance[i][j]) ? MaxDistance : Math.Max(MaxDistance, Distance[i][j]);
+                        MinDistance = i == j ? MinDistance : Math.Min(MinDistance, Distance[i][j]);
+                    }
+                }
+            }
+            else
+            {
+                Program.initThread.Join();
+                var ansObj = Program.MatlabMethods.CalculateDistance(1,
+                    new MWNumericArray(GetFeatureMatrix() as Array),
+                    new MWCharArray(DistanceMetric));//euclidean
+                var ans = ansObj[0].ToArray() as double[,];
+
+                for (int i = 0; i < DataPoints.Length; i++)
+                {
+                    Distance[i] = new double[DataPoints.Length];
+                }
+
+                for (int i = 0; i < DataPoints.Length; i++)
+                {
+                    for (int j = i; j < DataPoints.Length; j++)
+                    {
+                        Distance[i][j] = ans[i, j];
+                        Distance[j][i] = Distance[i][j];
+                        MaxDistance = Math.Max(MaxDistance, Distance[i][j]);
+                        MinDistance = i == j ? MinDistance : Math.Min(MinDistance, Distance[i][j]);
                     }
                 }
             }
@@ -147,7 +139,6 @@ namespace DataMiningFinal
         internal void CalculateRhos()
         {
             var DcSquare = Dc * Dc;
-            MaxRho = double.MinValue;
             for (int i = 0; i < DataPoints.Length; i++)
             {
                 switch (DensityDefinition)
@@ -160,7 +151,6 @@ namespace DataMiningFinal
                         Distance[i].ToList().ForEach(dis => DataPoints[i].rho += Math.Exp(-((dis * dis) / (DcSquare))));
                         break;
                 }
-                MaxRho = Math.Max(MaxRho, DataPoints[i].rho);
             }
 
             Console.WriteLine("Rhos calculated!");

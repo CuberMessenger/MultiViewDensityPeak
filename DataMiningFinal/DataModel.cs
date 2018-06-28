@@ -28,5 +28,5 @@ namespace DataMiningFinal
     }
 
     public enum DensityDefinition { NumOfNeighbor, GaussianKernal }
-    public enum DcSelection { EntropyBased, DistanceBased, NumOfPointsBased, AverageDistance }
+    public enum DcSelection { DistanceBased, NumOfPointsBased, AverageDistance }
 }

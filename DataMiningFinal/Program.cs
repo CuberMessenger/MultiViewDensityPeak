@@ -37,7 +37,7 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_zer");
             //MfeatByMultiView();
 
-            //University("cornell");
+            University("cornell");
             //University("texas");
             //University("washington");
             //University("wisconsin");
@@ -47,7 +47,7 @@ namespace DataMiningFinal
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            PlantByMultiView();
+            //PlantByMultiView();
 
             //ThreeSource();
         }

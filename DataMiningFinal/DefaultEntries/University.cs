@@ -11,8 +11,8 @@ namespace DataMiningFinal
         {
             List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab2\实验2\数据集\" + universityName + @"\" + universityName + ".mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["A"]), "cosine"));
-            views.Add(new View(ParseData(matFile["F"]), "cosine"));
+            views.Add(new View(ParseData(matFile["A"]), "geodesic"));
+            views.Add(new View(ParseData(matFile["F"]), "cityblock"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(5, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
