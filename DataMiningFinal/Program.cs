@@ -38,9 +38,9 @@ namespace DataMiningFinal
             //MfeatByMultiView();
 
             University("cornell");
-            //University("texas");
-            //University("washington");
-            //University("wisconsin");
+            University("texas");
+            University("washington");
+            University("wisconsin");
 
             //MultiViewArtificial();
 
@@ -56,13 +56,14 @@ namespace DataMiningFinal
         {
             List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\artificial\artificial.mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["view1"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["view2"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["v1"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["v2"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["v3"]), "euclidean"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(2, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
 
-            Measure(ans: GetLabels(matFile["viewans"]), myans: GetLabels(mvdp.Clustering()), name: "artificial");
+            Measure(ans: GetLabels(matFile["answer"]), myans: GetLabels(mvdp.Clustering()), name: "artificial");
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)
@@ -111,7 +112,7 @@ namespace DataMiningFinal
                 var temp = new List<double>();
                 for (int j = 0; j < noc; j++)
                 {
-                    temp.Add(raw[i * noc + j]);
+                    temp.Add(raw[i + j * nor]);
                 }
                 ans[i] = new DataPoint(temp.ToArray());
             }

@@ -10,8 +10,8 @@ namespace DataMiningFinal
         private static void University(string universityName)
         {
             List<View> views = new List<View>();
-            IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab2\实验2\数据集\" + universityName + @"\" + universityName + ".mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["A"]), "geodesic"));
+            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\university\" + universityName + @"\" + universityName + ".mat", FileMode.Open))).Read();
+            views.Add(new View(ParseData(matFile["A"]), "cityblock"));
             views.Add(new View(ParseData(matFile["F"]), "cityblock"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(5, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);

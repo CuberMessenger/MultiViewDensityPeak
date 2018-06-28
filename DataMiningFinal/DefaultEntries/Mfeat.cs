@@ -10,7 +10,7 @@ namespace DataMiningFinal
         private static void MfeatByMultiView()
         {
             List<View> views = new List<View>();
-            IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
+            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\Mfeat.mat", FileMode.Open))).Read();
             views.Add(new View(ParseData(matFile["data_fac"]), "euclidean"));
             views.Add(new View(ParseData(matFile["data_fou"]), "euclidean"));
             views.Add(new View(ParseData(matFile["data_kar"]), "euclidean"));
@@ -27,7 +27,7 @@ namespace DataMiningFinal
 
         private static void MfeatBySingleView(string entry)
         {
-            IMatFile matFile = (new MatFileReader(new FileStream(@"D:\OneDrive\资料\大三\大三下\数据挖掘\lab\Lab1\datasets\Mfeat.mat", FileMode.Open))).Read();
+            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\Mfeat.mat", FileMode.Open))).Read();
 
             DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]), "euclidean");
 
