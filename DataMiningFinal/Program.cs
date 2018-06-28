@@ -3,7 +3,6 @@ using MathWorks.MATLAB.NET.Arrays;
 using MatlabUtil;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -37,12 +36,15 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_zer");
             //MfeatByMultiView();
 
-            University("cornell");
-            University("texas");
-            University("washington");
-            University("wisconsin");
+            //University("cornell");
+            //University("texas");
+            //University("washington");
+            //University("wisconsin");
 
-            //MultiViewArtificial();
+            SingleViewArtificial("v1");
+            SingleViewArtificial("v2");
+            SingleViewArtificial("v3");
+            MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
@@ -50,20 +52,6 @@ namespace DataMiningFinal
             //PlantByMultiView();
 
             //ThreeSource();
-        }
-
-        private static void MultiViewArtificial()
-        {
-            List<View> views = new List<View>();
-            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\artificial\artificial.mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["v1"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["v2"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["v3"]), "euclidean"));
-
-            MultiViewDensityPeak mvdp = new MultiViewDensityPeak(2, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
-            mvdp.ConstructAbstractData();
-
-            Measure(ans: GetLabels(matFile["answer"]), myans: GetLabels(mvdp.Clustering()), name: "artificial");
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)

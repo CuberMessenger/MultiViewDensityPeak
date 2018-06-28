@@ -104,7 +104,7 @@ namespace DataMiningFinal
                     for (int j = 0; j < DataPoints.Length; j++)
                     {
                         MaxDistance = double.IsInfinity(Distance[i][j]) ? MaxDistance : Math.Max(MaxDistance, Distance[i][j]);
-                        MinDistance = i == j ? MinDistance : Math.Min(MinDistance, Distance[i][j]);
+                        MinDistance = Math.Min(MinDistance, Distance[i][j]);
                     }
                 }
             }
@@ -128,7 +128,7 @@ namespace DataMiningFinal
                         Distance[i][j] = ans[i, j];
                         Distance[j][i] = Distance[i][j];
                         MaxDistance = Math.Max(MaxDistance, Distance[i][j]);
-                        MinDistance = i == j ? MinDistance : Math.Min(MinDistance, Distance[i][j]);
+                        MinDistance = Math.Min(MinDistance, Distance[i][j]);
                     }
                 }
             }

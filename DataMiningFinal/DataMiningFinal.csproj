@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="3Source.cs" />
     <Compile Include="DataModel.cs" />
+    <Compile Include="DefaultEntries\Artificial.cs" />
     <Compile Include="DensityPeak.cs" />
     <Compile Include="DefaultEntries\Mfeat.cs" />
     <Compile Include="MultiViewDensityPeak.cs" />

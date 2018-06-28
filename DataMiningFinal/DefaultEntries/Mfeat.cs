@@ -1,5 +1,4 @@
 ﻿using MatFileHandler;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -33,7 +32,6 @@ namespace DataMiningFinal
 
             dp.Clustering();
 
-            Console.WriteLine("Single by " + entry);
             Measure(ans: GetLabels(matFile["classid"]), myans: GetLabels(dp.DataPoints), name: "Mfeat_" + entry);
         }
     }
