@@ -12,7 +12,7 @@ namespace DataMiningFinal
         public DataPoint[] DataPoints { get; set; }
         internal double[][] Distance { get; set; }
         internal double MaxDistance { get; set; }
-        internal double DistanceEntropy { get; set; }
+        internal double MaxRho { get; set; }
         internal double RhosEntropy { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
@@ -142,14 +142,9 @@ namespace DataMiningFinal
         internal void CalculateRhosEntropy()
         {
             RhosEntropy = 0;
-            double maxRho = 0;
             foreach (var dp in DataPoints)
             {
-                maxRho = Math.Max(maxRho, dp.rho);
-            }
-            foreach (var dp in DataPoints)
-            {
-                var normalRho = dp.rho / maxRho;
+                var normalRho = dp.rho / MaxRho;
                 RhosEntropy += normalRho == 0 ? 0 : -normalRho * Math.Log(normalRho);
             }
         }
@@ -157,6 +152,7 @@ namespace DataMiningFinal
         internal void CalculateRhos()
         {
             var DcSquare = Dc * Dc;
+            MaxRho = double.MinValue;
             for (int i = 0; i < DataPoints.Length; i++)
             {
                 switch (DensityDefinition)
@@ -169,6 +165,7 @@ namespace DataMiningFinal
                         Distance[i].ToList().ForEach(dis => DataPoints[i].rho += Math.Exp(-((dis * dis) / (DcSquare))));
                         break;
                 }
+                MaxRho = Math.Max(MaxRho, DataPoints[i].rho);
             }
 
             Console.WriteLine("Rhos calculated!");
