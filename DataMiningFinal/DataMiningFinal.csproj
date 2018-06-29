@@ -63,7 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="3Source.cs" />
+    <Compile Include="DefaultEntries\3Source.cs" />
     <Compile Include="DataModel.cs" />
     <Compile Include="DefaultEntries\Artificial.cs" />
     <Compile Include="DensityPeak.cs" />
