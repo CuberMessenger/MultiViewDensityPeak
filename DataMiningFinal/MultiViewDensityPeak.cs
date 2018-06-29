@@ -67,13 +67,13 @@ namespace DataMiningFinal
 
         public DataPoint[] Clustering()
         {
-            DensityPeak abstractDensityPeak =
+            AbstractDensityPeak =
                 new DensityPeak(K, AbstractDataPoints, DistanceMetricForAbstractData, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
-            abstractDensityPeak.FindMaxDistance();
-            abstractDensityPeak.CalculateDeltas();
-            abstractDensityPeak.CalculateTaus();
-            abstractDensityPeak.Clustering(false);
-            return abstractDensityPeak.DataPoints;
+            AbstractDensityPeak.FindMaxDistance();
+            AbstractDensityPeak.CalculateDeltas();
+            AbstractDensityPeak.CalculateTaus();
+            AbstractDensityPeak.Clustering(false);
+            return AbstractDensityPeak.DataPoints;
         }
     }
 }
