@@ -18,6 +18,10 @@ namespace DataMiningFinal
         {
             K = k;
             Distance = distance is null ? new double[DataPoints.Length][] : distance;
+            for (int i = 0; i < DataPoints.Length; i++)
+            {
+                DataPoints[i].id = i;
+            }
 
             //Configure
             DensityDefinition = densityDefinition;

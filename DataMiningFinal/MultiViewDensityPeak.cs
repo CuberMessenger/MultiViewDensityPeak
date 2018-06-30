@@ -32,16 +32,13 @@ namespace DataMiningFinal
             AbstractDistance = new double[NumOfDataPoints][];
             for (int i = 0; i < NumOfDataPoints; i++)
             {
-                AbstractDistance[i] = new double[NumOfDataPoints];
-                for (int j = 0; j < NumOfDataPoints; j++)
-                {
-                    AbstractDistance[i][j] = 0;
-                }
+                AbstractDistance[i] = Enumerable.Repeat(0d, NumOfDataPoints).ToArray();
             }
             foreach (var view in Views)
             {
                 view.CalculateDistances();
                 view.CalcDc();
+                view.CalculateRhos();
                 for (int i = 0; i < NumOfDataPoints; i++)
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
@@ -52,10 +49,6 @@ namespace DataMiningFinal
             }
 
             //datapoints
-            foreach (var view in Views)
-            {
-                view.CalculateRhos();
-            }
             AbstractDataPoints = new DataPoint[NumOfDataPoints];
             for (int i = 0; i < NumOfDataPoints; i++)
             {

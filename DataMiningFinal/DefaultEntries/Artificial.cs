@@ -24,7 +24,7 @@ namespace DataMiningFinal
         {
             IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\artificial\artificial.mat", FileMode.Open))).Read();
 
-            DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]), "euclidean");
+            DensityPeak dp = new DensityPeak(2, ParseData(matFile[entry]), "euclidean");
 
             dp.Clustering();
 

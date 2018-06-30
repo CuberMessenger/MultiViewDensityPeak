@@ -57,6 +57,36 @@ namespace DataMiningFinal
             Measure(ans: answer, myans: GetLabels(mvdp.Clustering()), name: "3Source");
         }
 
+        private static void ThreeSourceBySingleView(string entry)
+        {
+            List<int> jointArticalsID;
+            int[] answer;
+            List<DataPoint> dataPoints = new List<DataPoint>();
+            double[][] MTX = new double[NumOfArticalsIn3Sourse][];
+
+            var bbcIDs = ParseArticalID(@"..\..\..\Datasets\3sources\3sources_bbc.docs");
+            var reutersIDs = ParseArticalID(@"..\..\..\Datasets\3sources\3sources_reuters.docs");
+            var guardianIDs = ParseArticalID(@"..\..\..\Datasets\3sources\3sources_guardian.docs");
+            jointArticalsID = bbcIDs.Intersect(reutersIDs).Intersect(guardianIDs).ToList();
+
+            Thread MTXThread = new Thread(
+                () => ParseMTX(@"..\..\..\Datasets\3sources\3sources_" + entry + ".mtx", ref MTX, ref bbcIDs));
+            MTXThread.Start();
+            MTXThread.Join();
+
+            foreach (int id in jointArticalsID)
+            {
+                dataPoints.Add(new DataPoint(MTX[id - 1]));
+            }
+
+            answer = Parse3SourceLabel(ref jointArticalsID);
+
+            DensityPeak dp = new DensityPeak(6, dataPoints.ToArray(), "cosine");
+            dp.Clustering();
+
+            Measure(ans: answer, myans: GetLabels(dp.DataPoints), name: "3Source_" + entry);
+        }
+
         private static int[] Parse3SourceLabel(ref List<int> jointIDs)
         {
             int[] ans = new int[jointIDs.Count];
