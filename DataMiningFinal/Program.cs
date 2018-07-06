@@ -22,12 +22,12 @@ namespace DataMiningFinal
             });
             initThread.Start();
 
-            //MfeatBySingleView("data_fac");
-            //MfeatBySingleView("data_fou");
-            //MfeatBySingleView("data_kar");
-            //MfeatBySingleView("data_mor");
-            //MfeatBySingleView("data_pix");
-            //MfeatBySingleView("data_zer");
+            MfeatBySingleView("data_fac");
+            MfeatBySingleView("data_fou");
+            MfeatBySingleView("data_kar");
+            MfeatBySingleView("data_mor");
+            MfeatBySingleView("data_pix");
+            MfeatBySingleView("data_zer");
             MfeatByMultiView();
 
             //UniversityBySingleView("cornell", "A");
