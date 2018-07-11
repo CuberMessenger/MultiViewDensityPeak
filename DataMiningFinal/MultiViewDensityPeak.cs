@@ -39,12 +39,13 @@ namespace DataMiningFinal
                 view.CalculateDistances();
                 view.CalcDc();
                 view.CalculateRhos();
+                view.CalculateRhosEntropy();
                 for (int i = 0; i < NumOfDataPoints; i++)
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
                         //AbstractDistance[i][j] += (view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance);
-                        AbstractDistance[i][j] += view.Distance[i][j];
+                        AbstractDistance[i][j] += view.Distance[i][j] * view.RhosEntropy;
                     }
                 }
             }
