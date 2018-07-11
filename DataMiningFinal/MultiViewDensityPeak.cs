@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataMiningFinal
 {
@@ -34,7 +35,7 @@ namespace DataMiningFinal
             {
                 AbstractDistance[i] = Enumerable.Repeat(0d, NumOfDataPoints).ToArray();
             }
-            foreach (var view in Views)
+            Parallel.ForEach(Views, (view) =>
             {
                 view.CalculateDistances();
                 view.CalcDc();
@@ -46,7 +47,7 @@ namespace DataMiningFinal
                         AbstractDistance[i][j] += (view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance);
                     }
                 }
-            }
+            });
 
             //datapoints
             AbstractDataPoints = new DataPoint[NumOfDataPoints];
