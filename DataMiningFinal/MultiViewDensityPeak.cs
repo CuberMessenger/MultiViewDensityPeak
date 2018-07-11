@@ -43,7 +43,8 @@ namespace DataMiningFinal
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
-                        AbstractDistance[i][j] += (view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance);
+                        //AbstractDistance[i][j] += (view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance);
+                        AbstractDistance[i][j] += view.Distance[i][j];
                     }
                 }
             }

@@ -30,33 +30,33 @@ namespace DataMiningFinal
             MfeatBySingleView("data_zer");
             MfeatByMultiView();
 
-            //UniversityBySingleView("cornell", "A");
-            //UniversityBySingleView("cornell", "F");
-            //UniversityByMultiView("cornell");
-            //UniversityBySingleView("texas", "A");
-            //UniversityBySingleView("texas", "F");
-            //UniversityByMultiView("texas");
-            //UniversityBySingleView("washington", "A");
-            //UniversityBySingleView("washington", "F");
-            //UniversityByMultiView("washington");
-            //UniversityBySingleView("wisconsin", "A");
-            //UniversityBySingleView("wisconsin", "F");
-            //UniversityByMultiView("wisconsin");
+            UniversityBySingleView("cornell", "A");
+            UniversityBySingleView("cornell", "F");
+            UniversityByMultiView("cornell");
+            UniversityBySingleView("texas", "A");
+            UniversityBySingleView("texas", "F");
+            UniversityByMultiView("texas");
+            UniversityBySingleView("washington", "A");
+            UniversityBySingleView("washington", "F");
+            UniversityByMultiView("washington");
+            UniversityBySingleView("wisconsin", "A");
+            UniversityBySingleView("wisconsin", "F");
+            UniversityByMultiView("wisconsin");
 
-            //SingleViewArtificial("v1");
-            //SingleViewArtificial("v2");
-            //SingleViewArtificial("v3");
-            //MultiViewArtificial();
+            SingleViewArtificial("v1");
+            SingleViewArtificial("v2");
+            SingleViewArtificial("v3");
+            MultiViewArtificial();
 
-            //PlantBySingleView("data_Mar");
-            //PlantBySingleView("data_Sha");
-            //PlantBySingleView("data_Tex");
-            //PlantByMultiView();
+            PlantBySingleView("data_Mar");
+            PlantBySingleView("data_Sha");
+            PlantBySingleView("data_Tex");
+            PlantByMultiView();
 
-            //ThreeSourceBySingleView("bbc");
-            //ThreeSourceBySingleView("reuters");
-            //ThreeSourceBySingleView("guardian");
-            //ThreeSource();
+            ThreeSourceBySingleView("bbc");
+            ThreeSourceBySingleView("reuters");
+            ThreeSourceBySingleView("guardian");
+            ThreeSource();
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)

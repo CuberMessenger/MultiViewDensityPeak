@@ -133,6 +133,14 @@ namespace DataMiningFinal
                 }
             }
 
+            for (int i = 0; i < DataPoints.Length; i++)
+            {
+                for (int j = 0; j < DataPoints.Length; j++)
+                {
+                    Distance[i][j] = (Distance[i][j] - MinDistance) / (MaxDistance - MinDistance);
+                }
+            }
+
             Console.WriteLine("Distance calculated!");
         }
 
