@@ -28,6 +28,15 @@ namespace DataMiningFinal
             DcSelection = dcSelection;
         }
 
+        public DensityPeak(int k, View view) : base(view)
+        {
+            K = k;
+            for (int i = 0; i < DataPoints.Length; i++)
+            {
+                DataPoints[i].id = i;
+            }
+        }
+
         internal void AssignClusterID()
         {
             var order = DataPoints.OrderByDescending(dp => dp.rho);

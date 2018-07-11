@@ -27,6 +27,18 @@ namespace DataMiningFinal
             DistanceMetric = distanceMetric;
         }
 
+        public View(View view)
+        {
+            Dc = view.Dc;
+            DataPoints = view.DataPoints;
+            Distance = view.Distance;
+            MaxDistance = view.MaxDistance;
+            MinDistance = view.MinDistance;
+            DensityDefinition = view.DensityDefinition;
+            DcSelection = view.DcSelection;
+            DistanceMetric = view.DistanceMetric;
+        }
+
         internal void CalcDc()
         {
             switch (DcSelection)

@@ -67,6 +67,64 @@ namespace DataMiningFinal
             AbstractDensityPeak.CalculateDeltas();
             AbstractDensityPeak.CalculateTaus();
             AbstractDensityPeak.Clustering(false);
+
+            DensityPeak[] densityPeaks = new DensityPeak[Views.Length];
+            for (int i = 0; i < Views.Length; i++)
+            {
+                densityPeaks[i] = new DensityPeak(K, Views[i]);
+                densityPeaks[i].CalculateDeltas();
+                densityPeaks[i].CalculateTaus();
+                densityPeaks[i].Clustering(false);
+            }
+
+            int[][] sameClusterCount = new int[NumOfDataPoints][];
+            double[][] votes = new double[NumOfDataPoints][];
+            for (int i = 0; i < NumOfDataPoints; i++)
+            {
+                sameClusterCount[i] = Enumerable.Repeat(0, NumOfDataPoints).ToArray();
+                votes[i] = Enumerable.Repeat(0d, K).ToArray();
+            }
+            foreach (var model in densityPeaks)
+            {
+                for (int i = 0; i < NumOfDataPoints; i++)
+                {
+                    for (int j = 0; j < NumOfDataPoints; j++)
+                    {
+                        if (i == j)
+                        {
+                            continue;
+                        }
+                        if (model.DataPoints[i].clusterID == model.DataPoints[j].clusterID && !(model.DataPoints[i].clusterID is null))
+                        {
+                            sameClusterCount[i][j]++;
+                        }
+                        //if (model.DataPoints[i].clusterID != model.DataPoints[j].clusterID && !(model.DataPoints[i].clusterID is null) && !(model.DataPoints[j].clusterID is null))
+                        //{
+                        //    samePossibility[i][j]--;
+                        //}
+                    }
+                }
+            }
+
+            for (int i = 0; i < NumOfDataPoints; i++)
+            {
+                for (int j = 0; j < NumOfDataPoints; j++)
+                {
+                    votes[i][(int)AbstractDensityPeak.DataPoints[j].clusterID] += sameClusterCount[i][j] > 1 ? sameClusterCount[i][j] : 0d;
+                }
+                votes[i][(int)AbstractDensityPeak.DataPoints[i].clusterID] *= votes[i][(int)AbstractDensityPeak.DataPoints[i].clusterID];
+            }
+
+            for (int i = 0; i < NumOfDataPoints; i++)
+            {
+                double max = votes[i].Max();
+                int suppose = votes[i].ToList().IndexOf(max);
+                if (AbstractDensityPeak.DataPoints[i].clusterID != suppose)
+                {
+                    AbstractDensityPeak.DataPoints[i].clusterID = suppose;
+                }
+            }
+
             return AbstractDensityPeak.DataPoints;
         }
     }

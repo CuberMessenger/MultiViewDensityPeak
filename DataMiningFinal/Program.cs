@@ -22,13 +22,13 @@ namespace DataMiningFinal
             });
             initThread.Start();
 
-            MfeatBySingleView("data_fac");
-            MfeatBySingleView("data_fou");
-            MfeatBySingleView("data_kar");
-            MfeatBySingleView("data_mor");
-            MfeatBySingleView("data_pix");
-            MfeatBySingleView("data_zer");
-            MfeatByMultiView();
+            //MfeatBySingleView("data_fac");
+            //MfeatBySingleView("data_fou");
+            //MfeatBySingleView("data_kar");
+            //MfeatBySingleView("data_mor");
+            //MfeatBySingleView("data_pix");
+            //MfeatBySingleView("data_zer");
+            //MfeatByMultiView();
 
             //UniversityBySingleView("cornell", "A");
             //UniversityBySingleView("cornell", "F");
@@ -43,10 +43,10 @@ namespace DataMiningFinal
             //UniversityBySingleView("wisconsin", "F");
             //UniversityByMultiView("wisconsin");
 
-            SingleViewArtificial("v1");
-            SingleViewArtificial("v2");
-            SingleViewArtificial("v3");
-            MultiViewArtificial();
+            //SingleViewArtificial("v1");
+            //SingleViewArtificial("v2");
+            //SingleViewArtificial("v3");
+            //MultiViewArtificial();
 
             PlantBySingleView("data_Mar");
             PlantBySingleView("data_Sha");
