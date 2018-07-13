@@ -43,15 +43,15 @@ namespace DataMiningFinal
             //UniversityBySingleView("wisconsin", "F");
             //UniversityByMultiView("wisconsin");
 
-            //SingleViewArtificial("v1");
-            //SingleViewArtificial("v2");
-            //SingleViewArtificial("v3");
-            //MultiViewArtificial();
+            SingleViewArtificial("v1");
+            SingleViewArtificial("v2");
+            SingleViewArtificial("v3");
+            MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            PlantByMultiView();
+            //PlantByMultiView();
 
             //ThreeSourceBySingleView("bbc");
             //ThreeSourceBySingleView("reuters");
