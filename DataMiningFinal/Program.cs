@@ -28,7 +28,7 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_mor");
             //MfeatBySingleView("data_pix");
             //MfeatBySingleView("data_zer");
-            //MfeatByMultiView();
+            MfeatByMultiView();
 
             //UniversityBySingleView("cornell", "A");
             //UniversityBySingleView("cornell", "F");
@@ -43,15 +43,15 @@ namespace DataMiningFinal
             //UniversityBySingleView("wisconsin", "F");
             //UniversityByMultiView("wisconsin");
 
-            SingleViewArtificial("v1");
-            SingleViewArtificial("v2");
-            SingleViewArtificial("v3");
+            //SingleViewArtificial("v1");
+            //SingleViewArtificial("v2");
+            //SingleViewArtificial("v3");
             MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            //PlantByMultiView();
+            PlantByMultiView();
 
             //ThreeSourceBySingleView("bbc");
             //ThreeSourceBySingleView("reuters");
