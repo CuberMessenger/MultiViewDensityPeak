@@ -11,12 +11,12 @@ namespace DataMiningFinal
         {
             List<View> views = new List<View>();
             IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\NormalizedMfeat.mat", FileMode.Open))).Read();
-            views.Add(new View(ParseData(matFile["data_fac"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["data_fou"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["data_kar"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["data_mor"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["data_pix"]), "euclidean"));
-            views.Add(new View(ParseData(matFile["data_zer"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_fac"]), "euclidean", "data_fac"));
+            views.Add(new View(ParseData(matFile["data_fou"]), "euclidean", "data_fou"));
+            views.Add(new View(ParseData(matFile["data_kar"]), "euclidean", "data_kar"));
+            views.Add(new View(ParseData(matFile["data_mor"]), "euclidean", "data_mor"));
+            views.Add(new View(ParseData(matFile["data_pix"]), "euclidean", "data_pix"));
+            views.Add(new View(ParseData(matFile["data_zer"]), "euclidean", "data_zer"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(10, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();

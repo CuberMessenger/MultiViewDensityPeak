@@ -7,16 +7,20 @@ namespace DataMiningFinal
 {
     internal class View
     {
+        internal int K { get; set; }
         internal double Dc { get; set; }
-        public DataPoint[] DataPoints { get; set; }
+        internal DataPoint[] DataPoints { get; set; }
+        internal List<DataPoint> Centroids { get; set; }
         internal double[][] Distance { get; set; }
         internal double MaxDistance { get; set; }
         internal double MinDistance { get; set; }
+        internal double ViewQuality { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
         internal string DistanceMetric { get; set; }
+        internal string Tag { get; set; }
 
-        public View(DataPoint[] dataPoints, string distanceMetric)
+        public View(DataPoint[] dataPoints, string distanceMetric, string tag = null)
         {
             DataPoints = dataPoints;
             for (int i = 0; i < DataPoints.Length; i++)
@@ -25,6 +29,7 @@ namespace DataMiningFinal
             }
             Distance = Distance is null ? new double[DataPoints.Length][] : Distance;
             DistanceMetric = distanceMetric;
+            Tag = tag;
         }
 
         internal void CalcDc()
@@ -67,6 +72,12 @@ namespace DataMiningFinal
                 ans[i] = DataPoints[i].features.ToArray();
             }
             return ans;
+        }
+
+        internal void CalculateViewQuality()
+        {
+            Centroids = new List<DataPoint>(DataPoints.OrderByDescending(dp => dp.rho * (dp.delta - dp.tau)).Take(K));
+            ViewQuality = Centroids.Average(c => (c.delta) / MaxDistance);
         }
 
         internal void CalculateDistances()

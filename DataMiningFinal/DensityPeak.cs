@@ -7,9 +7,6 @@ namespace DataMiningFinal
 {
     internal class DensityPeak : View
     {
-        internal int K { get; set; }
-        private List<DataPoint> Centroids { get; set; }
-
         public DensityPeak(int k, DataPoint[] dataPoints,
             string distanceMetric,
             DensityDefinition densityDefinition = DensityDefinition.GaussianKernal,
@@ -60,9 +57,8 @@ namespace DataMiningFinal
                 CalculateDistances();
                 CalcDc();
                 CalculateRhos();
-                Thread t1 = new Thread(CalculateDeltas);
-                Thread t2 = new Thread(CalculateTaus);
-                t1.Start(); t2.Start(); t1.Join(); t2.Join();
+                CalculateDeltas();
+                CalculateTaus();
             }
 
             //Determine centroids
