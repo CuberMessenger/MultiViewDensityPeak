@@ -1,4 +1,5 @@
 ﻿using MatFileHandler;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,14 +10,13 @@ namespace DataMiningFinal
         private static void MfeatByMultiView()
         {
             List<View> views = new List<View>();
-            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\Mfeat.mat", FileMode.Open))).Read();
-            //fou + fac get current best performance
-            //views.Add(new View(ParseData(matFile["data_fac"]), "euclidean"));
+            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\NormalizedMfeat.mat", FileMode.Open))).Read();
+            views.Add(new View(ParseData(matFile["data_fac"]), "euclidean"));
             views.Add(new View(ParseData(matFile["data_fou"]), "euclidean"));
             views.Add(new View(ParseData(matFile["data_kar"]), "euclidean"));
-            //views.Add(new View(ParseData(matFile["data_mor"]), "euclidean"));
-            //views.Add(new View(ParseData(matFile["data_pix"]), "euclidean"));
-            //views.Add(new View(ParseData(matFile["data_zer"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_mor"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_pix"]), "euclidean"));
+            views.Add(new View(ParseData(matFile["data_zer"]), "euclidean"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(10, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
@@ -27,7 +27,7 @@ namespace DataMiningFinal
 
         private static void MfeatBySingleView(string entry)
         {
-            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\Mfeat.mat", FileMode.Open))).Read();
+            IMatFile matFile = (new MatFileReader(new FileStream(@"..\..\..\Datasets\mfeat\NormalizedMfeat.mat", FileMode.Open))).Read();
 
             DensityPeak dp = new DensityPeak(10, ParseData(matFile[entry]), "euclidean");
 
