@@ -28,7 +28,7 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_mor");
             //MfeatBySingleView("data_pix");
             //MfeatBySingleView("data_zer");
-            MfeatByMultiView();
+            //MfeatByMultiView();
 
             //UniversityBySingleView("cornell", "A");
             //UniversityBySingleView("cornell", "F");
@@ -51,7 +51,7 @@ namespace DataMiningFinal
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            //PlantByMultiView();
+            PlantByMultiView();
 
             //ThreeSourceBySingleView("bbc");
             //ThreeSourceBySingleView("reuters");
@@ -111,6 +111,29 @@ namespace DataMiningFinal
             }
 
             return ans;
+        }
+
+        private static void MinMaxNormalize(ref DataPoint[] dataPoints)
+        {
+            int nof = dataPoints.First().features.Count;
+            double[] mins = Enumerable.Repeat(double.MaxValue, nof).ToArray();
+            double[] maxs = Enumerable.Repeat(double.MinValue, nof).ToArray();
+            foreach (var dp in dataPoints)
+            {
+                for (int f = 0; f < nof; f++)
+                {
+                    mins[f] = Math.Min(mins[f], dp.features[f]);
+                    maxs[f] = Math.Max(maxs[f], dp.features[f]);
+                }
+            }
+
+            foreach (var dp in dataPoints)
+            {
+                for (int f = 0; f < nof; f++)
+                {
+                    dp.features[f] = (dp.features[f] - mins[f]) / (maxs[f] - mins[f]);
+                }
+            }
         }
     }
 }

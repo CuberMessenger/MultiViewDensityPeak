@@ -11,15 +11,21 @@ namespace DataMiningFinal
             List<View> views = new List<View>();
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Mar_64.txt"))
             {
-                views.Add(new View(ParsePlantData(sr.ReadToEnd()), "cosine"));
+                var dataPoints = ParsePlantData(sr.ReadToEnd());
+                MinMaxNormalize(ref dataPoints);
+                views.Add(new View(dataPoints, "cosine"));
             }
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Sha_64.txt"))
             {
-                views.Add(new View(ParsePlantData(sr.ReadToEnd()), "cosine"));
+                var dataPoints = ParsePlantData(sr.ReadToEnd());
+                MinMaxNormalize(ref dataPoints);
+                views.Add(new View(dataPoints, "cosine"));
             }
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\data_Tex_64.txt"))
             {
-                views.Add(new View(ParsePlantData(sr.ReadToEnd(), false), "cosine"));
+                var dataPoints = ParsePlantData(sr.ReadToEnd(), false);
+                MinMaxNormalize(ref dataPoints);
+                views.Add(new View(dataPoints, "cosine"));
             }
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(100, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance, "cosine");
@@ -47,7 +53,9 @@ namespace DataMiningFinal
             DensityPeak dp;
             using (StreamReader sr = new StreamReader(@"..\..\..\Datasets\plant\100 leaves plant species\" + viewName + "_64.txt"))
             {
-                dp = new DensityPeak(100, ParsePlantData(sr.ReadToEnd(), viewName != "data_Tex"), "cosine");
+                var dataPoints = ParsePlantData(sr.ReadToEnd(), viewName != "data_Tex");
+                MinMaxNormalize(ref dataPoints);
+                dp = new DensityPeak(100, dataPoints, "cosine");
             }
             dp.Clustering();
 

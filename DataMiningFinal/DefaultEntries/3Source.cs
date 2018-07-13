@@ -45,11 +45,18 @@ namespace DataMiningFinal
                 guardianDataPoints.Add(new DataPoint(guardianMTX[id - 1]));
             }
 
+            var bbcDataPointsArray = bbcDataPoints.ToArray();
+            var reutersDataPointsArray = reutersDataPoints.ToArray();
+            var guardianDataPointsArray = guardianDataPoints.ToArray();
+            MinMaxNormalize(ref bbcDataPointsArray);
+            MinMaxNormalize(ref reutersDataPointsArray);
+            MinMaxNormalize(ref guardianDataPointsArray);
+
             answer = Parse3SourceLabel(ref jointArticalsID);
 
-            views.Add(new View(bbcDataPoints.ToArray(), "cosine"));
-            views.Add(new View(reutersDataPoints.ToArray(), "cosine"));
-            views.Add(new View(guardianDataPoints.ToArray(), "cosine"));
+            views.Add(new View(bbcDataPointsArray, "euclidean"));
+            views.Add(new View(reutersDataPointsArray, "euclidean"));
+            views.Add(new View(guardianDataPointsArray, "euclidean"));
 
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(6, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
@@ -81,7 +88,7 @@ namespace DataMiningFinal
 
             answer = Parse3SourceLabel(ref jointArticalsID);
 
-            DensityPeak dp = new DensityPeak(6, dataPoints.ToArray(), "cosine");
+            DensityPeak dp = new DensityPeak(6, dataPoints.ToArray(), "euclidean");
             dp.Clustering();
 
             Measure(ans: answer, myans: GetLabels(dp.DataPoints), name: "3Source_" + entry);
