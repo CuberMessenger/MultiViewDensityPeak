@@ -14,13 +14,19 @@ namespace DataMiningFinal
         private double[][] AbstractDistance { get; set; }
         private DensityPeak AbstractDensityPeak { get; set; }
         private string DistanceMetricForAbstractData { get; set; }
+        private bool UseQualityEstimation { get; set; }
 
-        public MultiViewDensityPeak(int k, View[] views, DensityDefinition densityDefinition, DcSelection dcSelection, string distanceMetric = "euclidean")
+        public MultiViewDensityPeak(int k, View[] views, 
+            DensityDefinition densityDefinition, 
+            DcSelection dcSelection, 
+            string distanceMetric = "euclidean", 
+            bool useQualityEstimation = true)
         {
             K = k;
             Views = views;
             DistanceMetricForAbstractData = distanceMetric;
             NumOfDataPoints = Views.First().DataPoints.Length;
+            UseQualityEstimation = useQualityEstimation;
 
             foreach (var view in Views)
             {
@@ -92,7 +98,7 @@ namespace DataMiningFinal
                 foreach (var view in Views)
                 {
                     var factor = WeightedAverage(view.ViewQualityFactor1, view.ViewQualityFactor2);
-                    AbstractDataPoints[i].rho *= Math.Pow(view.DataPoints[i].rho, factor);
+                    AbstractDataPoints[i].rho *= Math.Pow(view.DataPoints[i].rho, UseQualityEstimation ? factor : 1d);
                 }
             }
         }

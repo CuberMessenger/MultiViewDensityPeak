@@ -58,11 +58,15 @@ namespace DataMiningFinal
             //ThreeSourceBySingleView("guardian");
             //ThreeSource();
 
-            ImageSegmentationBySingleView("1");
-            ImageSegmentationBySingleView("2");
-            ImageSegmentationBySingleView("3");
-            ImageSegmentationBySingleView("4");
-            ImageSegmentationByMultiView();
+            //ImageSegmentationBySingleView("1");
+            //ImageSegmentationBySingleView("2");
+            //ImageSegmentationBySingleView("3");
+            //ImageSegmentationBySingleView("4");
+            //ImageSegmentationByMultiView();
+
+            IrisBySingleView("1");
+            IrisBySingleView("2");
+            IrisByMultiView();
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)

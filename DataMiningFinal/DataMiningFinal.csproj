@@ -67,6 +67,7 @@
     <Compile Include="DataModel.cs" />
     <Compile Include="DefaultEntries\Artificial.cs" />
     <Compile Include="DefaultEntries\ImageSegmentation.cs" />
+    <Compile Include="DefaultEntries\Iris.cs" />
     <Compile Include="DensityPeak.cs" />
     <Compile Include="DefaultEntries\Mfeat.cs" />
     <Compile Include="MultiViewDensityPeak.cs" />
