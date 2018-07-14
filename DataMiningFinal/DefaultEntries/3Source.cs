@@ -48,9 +48,9 @@ namespace DataMiningFinal
             var bbcDataPointsArray = bbcDataPoints.ToArray();
             var reutersDataPointsArray = reutersDataPoints.ToArray();
             var guardianDataPointsArray = guardianDataPoints.ToArray();
-            MinMaxNormalize(ref bbcDataPointsArray);
-            MinMaxNormalize(ref reutersDataPointsArray);
-            MinMaxNormalize(ref guardianDataPointsArray);
+            //MinMaxNormalize(ref bbcDataPointsArray);
+            //MinMaxNormalize(ref reutersDataPointsArray);
+            //MinMaxNormalize(ref guardianDataPointsArray);
 
             answer = Parse3SourceLabel(ref jointArticalsID);
 

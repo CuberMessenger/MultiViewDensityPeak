@@ -51,7 +51,7 @@ namespace DataMiningFinal
                 AbstractDistance[i] = Enumerable.Repeat(0d, NumOfDataPoints).ToArray();
             }
 
-            var res = Parallel.ForEach(Views, (view) =>
+            Parallel.ForEach(Views, (view) =>
               {
                   view.CalculateDistances();
                   view.CalcDc();

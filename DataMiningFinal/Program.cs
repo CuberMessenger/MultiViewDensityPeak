@@ -28,7 +28,7 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_mor");
             //MfeatBySingleView("data_pix");
             //MfeatBySingleView("data_zer");
-            MfeatByMultiView();
+            //MfeatByMultiView();
 
             //UniversityBySingleView("cornell", "A");
             //UniversityBySingleView("cornell", "F");
@@ -51,12 +51,18 @@ namespace DataMiningFinal
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            PlantByMultiView();
+            //PlantByMultiView();
 
             //ThreeSourceBySingleView("bbc");
             //ThreeSourceBySingleView("reuters");
             //ThreeSourceBySingleView("guardian");
             //ThreeSource();
+
+            ImageSegmentationBySingleView("1");
+            ImageSegmentationBySingleView("2");
+            ImageSegmentationBySingleView("3");
+            ImageSegmentationBySingleView("4");
+            ImageSegmentationByMultiView();
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)
@@ -131,7 +137,14 @@ namespace DataMiningFinal
             {
                 for (int f = 0; f < nof; f++)
                 {
-                    dp.features[f] = (dp.features[f] - mins[f]) / (maxs[f] - mins[f]);
+                    if (maxs[f] != mins[f])
+                    {
+                        dp.features[f] = (dp.features[f] - mins[f]) / (maxs[f] - mins[f]);
+                    }
+                    else
+                    {
+                        dp.features[f] = 0;
+                    }
                 }
             }
         }
