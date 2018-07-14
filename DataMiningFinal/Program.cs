@@ -46,7 +46,7 @@ namespace DataMiningFinal
             //SingleViewArtificial("v1");
             //SingleViewArtificial("v2");
             //SingleViewArtificial("v3");
-            MultiViewArtificial();
+            //MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");

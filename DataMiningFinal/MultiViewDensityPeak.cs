@@ -30,6 +30,18 @@ namespace DataMiningFinal
             }
         }
 
+        private double WeightedAverage(double x, double y)
+        {
+            if (x + y == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return (2 * x * y) / (x + y);
+            }
+        }
+
         public void ConstructAbstractData()
         {
             //distance
@@ -49,22 +61,15 @@ namespace DataMiningFinal
                   view.CalculateViewQuality();
               });
 
-            var minQuality = double.MaxValue;
-            var minIndex = -1;
-            for (int i = 0; i < Views.Length; i++)
+            var minFactor1 = Views.Min(v => v.ViewQualityFactor1);
+            var maxFactor1 = Views.Max(v => v.ViewQualityFactor1);
+            var minFactor2 = Views.Min(v => v.ViewQualityFactor2);
+            var maxFactor2 = Views.Max(v => v.ViewQualityFactor2);
+            foreach (var view in Views)
             {
-                if (Views[i].ViewQuality < minQuality)
-                {
-                    minQuality = Views[i].ViewQuality;
-                    minIndex = i;
-                }
-            }
-
-            Views[minIndex].ViewQuality = Math.E;
-            for (int i = 0; i < Views.Length; i++)
-            {
-                Views[i].ViewQuality = (Views[i].ViewQuality / minQuality) * Math.E;
-                Console.WriteLine(Math.Log(Views[i].ViewQuality + 10d));
+                view.ViewQualityFactor1 = (view.ViewQualityFactor1 - minFactor1) / (maxFactor1 - minFactor1) + 0.1;
+                view.ViewQualityFactor2 = (view.ViewQualityFactor2 - minFactor2) / (maxFactor2 - minFactor2) + 0.1;
+                Console.WriteLine("Quality Factors: {0}\t{1}\t{2}", view.ViewQualityFactor1, view.ViewQualityFactor2, WeightedAverage(view.ViewQualityFactor1, view.ViewQualityFactor2));
             }
 
             Parallel.ForEach(Views, (view) =>
@@ -73,7 +78,7 @@ namespace DataMiningFinal
                 {
                     for (int j = 0; j < NumOfDataPoints; j++)
                     {
-                        AbstractDistance[i][j] += ((view.Distance[i][j] - view.MinDistance) * Math.Log(view.ViewQuality + 10d)) / (view.MaxDistance - view.MinDistance);
+                        AbstractDistance[i][j] += ((view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance));
                     }
                 }
             });
@@ -84,7 +89,11 @@ namespace DataMiningFinal
             {
                 AbstractDataPoints[i] = new DataPoint(i);
                 AbstractDataPoints[i].rho = 1d;
-                Views.ToList().ForEach(view => AbstractDataPoints[i].rho *= view.DataPoints[i].rho);
+                foreach (var view in Views)
+                {
+                    var factor = WeightedAverage(view.ViewQualityFactor1, view.ViewQualityFactor2);
+                    AbstractDataPoints[i].rho *= Math.Pow(view.DataPoints[i].rho, factor);
+                }
             }
         }
 

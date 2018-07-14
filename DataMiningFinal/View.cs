@@ -14,7 +14,8 @@ namespace DataMiningFinal
         internal double[][] Distance { get; set; }
         internal double MaxDistance { get; set; }
         internal double MinDistance { get; set; }
-        internal double ViewQuality { get; set; }
+        internal double ViewQualityFactor1 { get; set; }
+        internal double ViewQualityFactor2 { get; set; }
         internal DensityDefinition DensityDefinition { get; set; }
         internal DcSelection DcSelection { get; set; }
         internal string DistanceMetric { get; set; }
@@ -76,8 +77,10 @@ namespace DataMiningFinal
 
         internal void CalculateViewQuality()
         {
+            var averageRho = DataPoints.Average(dp => dp.rho);
             Centroids = new List<DataPoint>(DataPoints.OrderByDescending(dp => dp.rho * (dp.delta - dp.tau)).Take(K));
-            ViewQuality = Centroids.Average(c => (c.delta) / MaxDistance);
+            ViewQualityFactor1 = Centroids.Average(c => (c.delta - c.tau) / MaxDistance);
+            ViewQualityFactor2 = Centroids.Average(c => c.rho / averageRho);
         }
 
         internal void CalculateDistances()
