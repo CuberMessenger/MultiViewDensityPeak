@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -46,6 +47,22 @@ namespace DataMiningFinal
                 foreach (var dis in line)
                 {
                     MaxDistance = Math.Max(MaxDistance, dis);
+                }
+            }
+        }
+
+        internal void WriteDataPoints(string path)
+        {
+            using (StreamWriter sw = new StreamWriter(path))
+            {
+                foreach (var dp in DataPoints)
+                {
+                    for (int i = 0; i < dp.features.Count; i++)
+                    {
+                        sw.Write(dp.features[i] + ",");
+                    }
+                    sw.Write(dp.rho + ",");
+                    sw.WriteLine(dp.delta);
                 }
             }
         }

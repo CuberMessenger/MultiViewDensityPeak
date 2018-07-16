@@ -28,7 +28,7 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_mor");
             //MfeatBySingleView("data_pix");
             //MfeatBySingleView("data_zer");
-            //MfeatByMultiView();
+            MfeatByMultiView();
 
             //UniversityBySingleView("cornell", "A");
             //UniversityBySingleView("cornell", "F");
@@ -46,12 +46,12 @@ namespace DataMiningFinal
             //SingleViewArtificial("v1");
             //SingleViewArtificial("v2");
             //SingleViewArtificial("v3");
-            //MultiViewArtificial();
+            MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            //PlantByMultiView();
+            PlantByMultiView();
 
             //ThreeSourceBySingleView("bbc");
             //ThreeSourceBySingleView("reuters");
@@ -62,10 +62,10 @@ namespace DataMiningFinal
             //ImageSegmentationBySingleView("2");
             //ImageSegmentationBySingleView("3");
             //ImageSegmentationBySingleView("4");
-            //ImageSegmentationByMultiView();
+            ImageSegmentationByMultiView();
 
-            IrisBySingleView("1");
-            IrisBySingleView("2");
+            //IrisBySingleView("1");
+            //IrisBySingleView("2");
             IrisByMultiView();
         }
 

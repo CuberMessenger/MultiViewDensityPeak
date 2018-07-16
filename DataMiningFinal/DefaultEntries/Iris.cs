@@ -34,8 +34,8 @@ namespace DataMiningFinal
                     double[] v1f = new double[2];
                     double[] v2f = new double[2];
                     v1f[0] = double.Parse(raw[0]);
-                    v1f[1] = double.Parse(raw[1]);
-                    v2f[0] = double.Parse(raw[2]);
+                    v1f[1] = double.Parse(raw[2]);
+                    v2f[0] = double.Parse(raw[1]);
                     v2f[1] = double.Parse(raw[3]);
 
                     view1DataPoints.Add(new DataPoint(v1f));
