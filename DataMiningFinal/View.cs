@@ -79,8 +79,8 @@ namespace DataMiningFinal
         {
             var averageRho = DataPoints.Average(dp => dp.rho);
             Centroids = new List<DataPoint>(DataPoints.OrderByDescending(dp => dp.rho * (dp.delta - dp.tau)).Take(K));
-            ViewQualityFactor1 = Centroids.Average(c => (c.delta - c.tau) / MaxDistance);
-            ViewQualityFactor2 = Centroids.Average(c => c.rho / averageRho);
+            ViewQualityFactor1 = Centroids.Average(c => c.rho / averageRho);
+            ViewQualityFactor2 = Centroids.Average(c => (c.delta - c.tau) / MaxDistance);
         }
 
         internal void CalculateDistances()

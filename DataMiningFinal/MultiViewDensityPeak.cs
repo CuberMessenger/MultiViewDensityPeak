@@ -16,10 +16,10 @@ namespace DataMiningFinal
         private string DistanceMetricForAbstractData { get; set; }
         private bool UseQualityEstimation { get; set; }
 
-        public MultiViewDensityPeak(int k, View[] views, 
-            DensityDefinition densityDefinition, 
-            DcSelection dcSelection, 
-            string distanceMetric = "euclidean", 
+        public MultiViewDensityPeak(int k, View[] views,
+            DensityDefinition densityDefinition,
+            DcSelection dcSelection,
+            string distanceMetric = "euclidean",
             bool useQualityEstimation = true)
         {
             K = k;
@@ -75,7 +75,7 @@ namespace DataMiningFinal
             {
                 view.ViewQualityFactor1 = (view.ViewQualityFactor1 - minFactor1) / (maxFactor1 - minFactor1) + 0.1;
                 view.ViewQualityFactor2 = (view.ViewQualityFactor2 - minFactor2) / (maxFactor2 - minFactor2) + 0.1;
-                Console.WriteLine("Quality Factors: {0}\t{1}\t{2}", view.ViewQualityFactor1, view.ViewQualityFactor2, WeightedAverage(view.ViewQualityFactor1, view.ViewQualityFactor2));
+                Console.WriteLine("Quality Factors: {0}\t{1}\t{2}", view.ViewQualityFactor1, view.ViewQualityFactor2, WeightedAverage(view.ViewQualityFactor2, view.ViewQualityFactor1));
             }
 
             Parallel.ForEach(Views, (view) =>
