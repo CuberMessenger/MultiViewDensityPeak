@@ -62,7 +62,7 @@ namespace DataMiningFinal
             //ImageSegmentationBySingleView("2");
             //ImageSegmentationBySingleView("3");
             //ImageSegmentationBySingleView("4");
-            ImageSegmentationByMultiView();
+            //ImageSegmentationByMultiView();
 
             //IrisBySingleView("1");
             //IrisBySingleView("2");

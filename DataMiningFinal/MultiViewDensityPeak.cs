@@ -7,6 +7,8 @@ namespace DataMiningFinal
 {
     internal class MultiViewDensityPeak
     {
+        private static double Alpha = 0.1d;
+
         private int K { get; set; }
         private int NumOfDataPoints { get; set; }
         private View[] Views { get; set; }
@@ -65,6 +67,17 @@ namespace DataMiningFinal
                   view.CalculateDeltas();
                   view.CalculateTaus();
                   view.CalculateViewQuality();
+
+                  lock (AbstractDistance)
+                  {
+                      for (int i = 0; i < NumOfDataPoints; i++)
+                      {
+                          for (int j = 0; j < NumOfDataPoints; j++)
+                          {
+                              AbstractDistance[i][j] += ((view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance));
+                          }
+                      }
+                  }
               });
 
             var minFactor1 = Views.Min(v => v.ViewQualityFactor1);
@@ -73,21 +86,10 @@ namespace DataMiningFinal
             var maxFactor2 = Views.Max(v => v.ViewQualityFactor2);
             foreach (var view in Views)
             {
-                view.ViewQualityFactor1 = (view.ViewQualityFactor1 - minFactor1) / (maxFactor1 - minFactor1) + 0.1;
-                view.ViewQualityFactor2 = (view.ViewQualityFactor2 - minFactor2) / (maxFactor2 - minFactor2) + 0.1;
+                view.ViewQualityFactor1 = (view.ViewQualityFactor1 - minFactor1) / (maxFactor1 - minFactor1) + Alpha;
+                view.ViewQualityFactor2 = (view.ViewQualityFactor2 - minFactor2) / (maxFactor2 - minFactor2) + Alpha;
                 Console.WriteLine("Quality Factors: {0}\t{1}\t{2}", view.ViewQualityFactor1, view.ViewQualityFactor2, WeightedAverage(view.ViewQualityFactor2, view.ViewQualityFactor1));
             }
-
-            Parallel.ForEach(Views, (view) =>
-            {
-                for (int i = 0; i < NumOfDataPoints; i++)
-                {
-                    for (int j = 0; j < NumOfDataPoints; j++)
-                    {
-                        AbstractDistance[i][j] += ((view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance));
-                    }
-                }
-            });
 
             //datapoints
             AbstractDataPoints = new DataPoint[NumOfDataPoints];
