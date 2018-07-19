@@ -59,8 +59,9 @@ namespace DataMiningFinal
                 AbstractDistance[i] = Enumerable.Repeat(0d, NumOfDataPoints).ToArray();
             }
 
-            Parallel.ForEach(Views, (view) =>
-              {
+            foreach (var view in Views)
+            //Parallel.ForEach(Views, (view) =>
+            {
                   view.CalculateDistances();
                   view.CalcDc();
                   view.CalculateRhos();
@@ -78,7 +79,7 @@ namespace DataMiningFinal
                           }
                       }
                   }
-              });
+              }//);
 
             var minFactor1 = Views.Min(v => v.ViewQualityFactor1);
             var maxFactor1 = Views.Max(v => v.ViewQualityFactor1);

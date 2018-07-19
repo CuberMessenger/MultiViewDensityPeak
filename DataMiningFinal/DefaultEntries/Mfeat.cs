@@ -18,8 +18,10 @@ namespace DataMiningFinal
             views.Add(new View(ParseData(matFile["data_pix"]), "euclidean", "data_pix"));
             views.Add(new View(ParseData(matFile["data_zer"]), "euclidean", "data_zer"));
 
+            DateTime start = DateTime.Now;
             MultiViewDensityPeak mvdp = new MultiViewDensityPeak(10, views.ToArray(), DensityDefinition.GaussianKernal, DcSelection.AverageDistance);
             mvdp.ConstructAbstractData();
+            Console.WriteLine("Cost Time: {0}", (DateTime.Now - start).TotalMilliseconds);
 
             Measure(ans: GetLabels(matFile["classid"]), myans: GetLabels(mvdp.Clustering()), name: "Mfeat");
         }

@@ -21,6 +21,7 @@ namespace DataMiningFinal
                 Console.WriteLine("MatlabUtil Inited!");
             });
             initThread.Start();
+            //initThread.Join();
 
             //MfeatBySingleView("data_fac");
             //MfeatBySingleView("data_fou");
@@ -46,12 +47,12 @@ namespace DataMiningFinal
             //SingleViewArtificial("v1");
             //SingleViewArtificial("v2");
             //SingleViewArtificial("v3");
-            MultiViewArtificial();
+            //MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            PlantByMultiView();
+            //PlantByMultiView();
 
             //ThreeSourceBySingleView("bbc");
             //ThreeSourceBySingleView("reuters");
@@ -66,7 +67,7 @@ namespace DataMiningFinal
 
             //IrisBySingleView("1");
             //IrisBySingleView("2");
-            IrisByMultiView();
+            //IrisByMultiView();
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)

@@ -125,10 +125,14 @@ namespace DataMiningFinal
             else
             {
                 Program.initThread.Join();
-                var ansObj = Program.MatlabMethods.CalculateDistance(1,
-                    new MWNumericArray(GetFeatureMatrix() as Array),
-                    new MWCharArray(DistanceMetric));//euclidean
-                var ans = ansObj[0].ToArray() as double[,];
+                MWArray[] ansArray = null;
+                lock (Program.MatlabMethods)
+                {
+                    ansArray = Program.MatlabMethods.CalculateDistance(1,
+                        new MWNumericArray(GetFeatureMatrix() as Array),
+                        new MWCharArray(DistanceMetric));//euclidean
+                }
+                var ans = ansArray[0].ToArray() as double[,];
 
                 for (int i = 0; i < DataPoints.Length; i++)
                 {
