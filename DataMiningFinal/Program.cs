@@ -31,43 +31,19 @@ namespace DataMiningFinal
             //MfeatBySingleView("data_zer");
             MfeatByMultiView();
 
-            //UniversityBySingleView("cornell", "A");
-            //UniversityBySingleView("cornell", "F");
-            //UniversityByMultiView("cornell");
-            //UniversityBySingleView("texas", "A");
-            //UniversityBySingleView("texas", "F");
-            //UniversityByMultiView("texas");
-            //UniversityBySingleView("washington", "A");
-            //UniversityBySingleView("washington", "F");
-            //UniversityByMultiView("washington");
-            //UniversityBySingleView("wisconsin", "A");
-            //UniversityBySingleView("wisconsin", "F");
-            //UniversityByMultiView("wisconsin");
-
             //SingleViewArtificial("v1");
             //SingleViewArtificial("v2");
             //SingleViewArtificial("v3");
-            //MultiViewArtificial();
+            MultiViewArtificial();
 
             //PlantBySingleView("data_Mar");
             //PlantBySingleView("data_Sha");
             //PlantBySingleView("data_Tex");
-            //PlantByMultiView();
-
-            //ThreeSourceBySingleView("bbc");
-            //ThreeSourceBySingleView("reuters");
-            //ThreeSourceBySingleView("guardian");
-            //ThreeSource();
-
-            //ImageSegmentationBySingleView("1");
-            //ImageSegmentationBySingleView("2");
-            //ImageSegmentationBySingleView("3");
-            //ImageSegmentationBySingleView("4");
-            //ImageSegmentationByMultiView();
+            PlantByMultiView();
 
             //IrisBySingleView("1");
             //IrisBySingleView("2");
-            //IrisByMultiView();
+            IrisByMultiView();
         }
 
         private static int[] GetLabels(DataPoint[] dataPoints)

@@ -12,10 +12,10 @@ namespace DataMiningFinal
         private int K { get; set; }
         private int NumOfDataPoints { get; set; }
         private View[] Views { get; set; }
-        private DataPoint[] AbstractDataPoints { get; set; }
-        private double[][] AbstractDistance { get; set; }
-        private DensityPeak AbstractDensityPeak { get; set; }
-        private string DistanceMetricForAbstractData { get; set; }
+        private DataPoint[] GlobalViewDataPoints { get; set; }
+        private double[][] GlobalViewDistance { get; set; }
+        private DensityPeak GlobalViewDensityPeak { get; set; }
+        private string DistanceMetricForGlobalData { get; set; }
         private bool UseQualityEstimation { get; set; }
 
         public MultiViewDensityPeak(int k, View[] views,
@@ -26,7 +26,7 @@ namespace DataMiningFinal
         {
             K = k;
             Views = views;
-            DistanceMetricForAbstractData = distanceMetric;
+            DistanceMetricForGlobalData = distanceMetric;
             NumOfDataPoints = Views.First().DataPoints.Length;
             UseQualityEstimation = useQualityEstimation;
 
@@ -53,33 +53,33 @@ namespace DataMiningFinal
         public void ConstructAbstractData()
         {
             //distance
-            AbstractDistance = new double[NumOfDataPoints][];
+            GlobalViewDistance = new double[NumOfDataPoints][];
             for (int i = 0; i < NumOfDataPoints; i++)
             {
-                AbstractDistance[i] = Enumerable.Repeat(0d, NumOfDataPoints).ToArray();
+                GlobalViewDistance[i] = Enumerable.Repeat(0d, NumOfDataPoints).ToArray();
             }
 
-            foreach (var view in Views)
-            //Parallel.ForEach(Views, (view) =>
+            //foreach (var view in Views)
+            Parallel.ForEach(Views, (view) =>
             {
-                  view.CalculateDistances();
-                  view.CalcDc();
-                  view.CalculateRhos();
-                  view.CalculateDeltas();
-                  view.CalculateTaus();
-                  view.CalculateViewQuality();
+                view.CalculateDistances();
+                view.CalcDc();
+                view.CalculateRhos();
+                view.CalculateDeltas();
+                view.CalculateTaus();
+                view.CalculateViewQuality();
 
-                  lock (AbstractDistance)
-                  {
-                      for (int i = 0; i < NumOfDataPoints; i++)
-                      {
-                          for (int j = 0; j < NumOfDataPoints; j++)
-                          {
-                              AbstractDistance[i][j] += ((view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance));
-                          }
-                      }
-                  }
-              }//);
+                lock (GlobalViewDistance)
+                {
+                    for (int i = 0; i < NumOfDataPoints; i++)
+                    {
+                        for (int j = 0; j < NumOfDataPoints; j++)
+                        {
+                            GlobalViewDistance[i][j] += ((view.Distance[i][j] - view.MinDistance) / (view.MaxDistance - view.MinDistance));
+                        }
+                    }
+                }
+            });
 
             var minFactor1 = Views.Min(v => v.ViewQualityFactor1);
             var maxFactor1 = Views.Max(v => v.ViewQualityFactor1);
@@ -93,28 +93,28 @@ namespace DataMiningFinal
             }
 
             //datapoints
-            AbstractDataPoints = new DataPoint[NumOfDataPoints];
+            GlobalViewDataPoints = new DataPoint[NumOfDataPoints];
             for (int i = 0; i < NumOfDataPoints; i++)
             {
-                AbstractDataPoints[i] = new DataPoint(i);
-                AbstractDataPoints[i].rho = 1d;
+                GlobalViewDataPoints[i] = new DataPoint(i);
+                GlobalViewDataPoints[i].rho = 1d;
                 foreach (var view in Views)
                 {
                     var factor = WeightedAverage(view.ViewQualityFactor1, view.ViewQualityFactor2);
-                    AbstractDataPoints[i].rho *= Math.Pow(view.DataPoints[i].rho, UseQualityEstimation ? factor : 1d);
+                    GlobalViewDataPoints[i].rho *= Math.Pow(view.DataPoints[i].rho, UseQualityEstimation ? factor : 1d);
                 }
             }
         }
 
         public DataPoint[] Clustering()
         {
-            AbstractDensityPeak =
-                new DensityPeak(K, AbstractDataPoints, DistanceMetricForAbstractData, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, AbstractDistance);
-            AbstractDensityPeak.FindMaxDistance();
-            AbstractDensityPeak.CalculateDeltas();
-            AbstractDensityPeak.CalculateTaus();
-            AbstractDensityPeak.Clustering(false);
-            return AbstractDensityPeak.DataPoints;
+            GlobalViewDensityPeak =
+                new DensityPeak(K, GlobalViewDataPoints, DistanceMetricForGlobalData, DensityDefinition.GaussianKernal, DcSelection.AverageDistance, GlobalViewDistance);
+            GlobalViewDensityPeak.FindMaxDistance();
+            GlobalViewDensityPeak.CalculateDeltas();
+            GlobalViewDensityPeak.CalculateTaus();
+            GlobalViewDensityPeak.Clustering(false);
+            return GlobalViewDensityPeak.DataPoints;
         }
     }
 }
