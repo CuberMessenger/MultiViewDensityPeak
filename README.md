@@ -23,21 +23,17 @@ DataMiningFinal - 代码文件
 
 Datasets - 数据集
 
-​	3sourses
-
 ​	artificial - 生成的人工数据集，一共340个点，3个视图
+
+​	iris
 
 ​	mfeat
 
-​	olivettifaces
-
 ​	plant
-
-​	university
 
 packages - 包
 
-​	MatFileHandler - 读取.mat文件
+​	MatFileHandler - 用于读取.mat文件
 
 ​	MathNet - 向量表示
 
